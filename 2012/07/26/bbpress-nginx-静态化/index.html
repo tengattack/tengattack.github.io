@@ -1,81 +1,92 @@
-<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="2022870020"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2012/07/26/bbpress-nginx-静态化/" data-reactid="21"><h2 class="entry-title" data-reactid="22">bbPress nginx 静态化</h2></a></header><div class="entry-content" data-reactid="23">
-最近开始接触到bbPress这个简洁清爽的论坛程序，比起discuz它可是舒服的很，没有一些多余的无用的垃圾功能，插件也很丰富（相对）。不过，他也一样继承了wordpress的蛋疼的模板的方法。
-
-我们现在来看看如何将它静态化：
-
-<!--more-->
-
-<strong>这里使用的bbPress是1.1版本，其他的版本可以类推。</strong>
-
-我们了解到，bbPress在Apache中静态化设置是这样的：
-[sourcecode language="plain"]
-RewriteRule ^page/([0-9]+)/?$ /index.php?page=$1 [L,QSA]
-RewriteRule ^forum/([^/]+)/page/([0-9]+)/?$ /forum.php?id=$1&amp;page=$2 [L,QSA]
-RewriteRule ^forum/([^/]+)/?$ /forum.php?id=$1 [L,QSA]
-RewriteRule ^forum/?$ / [R=302,L,QSA]
-RewriteRule ^topic/([^/]+)/page/([0-9]+)/?$ /topic.php?id=$1&amp;page=$2 [L,QSA]
-RewriteRule ^topic/([^/]+)/?$ /topic.php?id=$1 [L,QSA]
-RewriteRule ^topic/?$ / [R=302,L,QSA]
-RewriteRule ^tags/([^/]+)/page/([0-9]+)/?$ /tags.php?tag=$1&amp;page=$2 [L,QSA]
-RewriteRule ^tags/([^/]+)/?$ /tags.php?tag=$1 [L,QSA]
-RewriteRule ^tags/?$ /tags.php [L,QSA]
-RewriteRule ^profile/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;page=$2 [L,QSA]
-RewriteRule ^profile/([^/]+)/([^/]+)/?$ /profile.php?id=$1&amp;tab=$2 [L,QSA]
-RewriteRule ^profile/([^/]+)/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;tab=$2&amp;page=$3 [L,QSA]
-RewriteRule ^profile/([^/]+)/?$ /profile.php?id=$1 [L,QSA]
-RewriteRule ^profile/?$ /profile.php [L,QSA]
-RewriteRule ^view/([^/]+)/page/([0-9]+)/?$ /view.php?view=$1&amp;page=$2 [L,QSA]
-RewriteRule ^view/([^/]+)/?$ /view.php?view=$1 [L,QSA]
-RewriteRule ^rss/?$ /rss.php [L,QSA]
-RewriteRule ^rss/topics/?$ /rss.php?topics=1 [L,QSA]
-RewriteRule ^rss/forum/([^/]+)/?$ /rss.php?forum=$1 [L,QSA]
-RewriteRule ^rss/forum/([^/]+)/topics/?$ /rss.php?forum=$1&amp;topics=1 [L,QSA]
-RewriteRule ^rss/topic/([^/]+)/?$ /rss.php?topic=$1 [L,QSA]
-RewriteRule ^rss/tags/([^/]+)/?$ /rss.php?tag=$1 [L,QSA]
-RewriteRule ^rss/tags/([^/]+)/topics/?$ /rss.php?tag=$1&amp;topics=1 [L,QSA]
-RewriteRule ^rss/profile/([^/]+)/?$ /rss.php?profile=$1 [L,QSA]
-RewriteRule ^rss/view/([^/]+)/?$ /rss.php?view=$1 [L,QSA]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^.*$ /index.php [L]
-[/sourcecode]
-
-稍微修改一下，bbPress就可以在nginx中设置静态化链接了：
-[sourcecode language="plain"]
-rewrite ^/page/([0-9]+)/?$ /index.php?page=$1 last;
-rewrite ^/forum/([^/]+)/page/([0-9]+)/?$ /forum.php?id=$1&amp;page=$2 last;
-rewrite ^/forum/([^/]+)/?$ /forum.php?id=$1 last;
-rewrite ^/forum/?$ /;
-rewrite ^/topic/([^/]+)/page/([0-9]+)/?$ /topic.php?id=$1&amp;page=$2 last;
-rewrite ^/topic/([^/]+)/?$ /topic.php?id=$1 last;
-rewrite ^/topic/?$ /;
-rewrite ^/tags/([^/]+)/page/([0-9]+)/?$ /tags.php?tag=$1&amp;page=$2 last;
-rewrite ^/tags/([^/]+)/?$ /tags.php?tag=$1 last;
-rewrite ^/tags/?$ /tags.php last;
-rewrite ^/profile/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;page=$2 last;
-rewrite ^/profile/([^/]+)/([^/]+)/?$ /profile.php?id=$1&amp;tab=$2 last;
-rewrite ^/profile/([^/]+)/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;tab=$2&amp;page=$3 last;
-rewrite ^/profile/([^/]+)/?$ /profile.php?id=$1 last;
-rewrite ^/profile/?$ /profile.php last;
-rewrite ^/view/([^/]+)/page/([0-9]+)/?$ /view.php?view=$1&amp;page=$2 last;
-rewrite ^/view/([^/]+)/?$ /view.php?view=$1 last;
-rewrite ^/rss/?$ /rss.php last;
-rewrite ^/rss/topics/?$ /rss.php?topics=1 last;
-rewrite ^/rss/forum/([^/]+)/?$ /rss.php?forum=$1 last;
-rewrite ^/rss/forum/([^/]+)/topics/?$ /rss.php?forum=$1&amp;topics=1 last;
-rewrite ^/rss/topic/([^/]+)/?$ /rss.php?topic=$1 last;
-rewrite ^/rss/tags/([^/]+)/?$ /rss.php?tag=$1 last;
-rewrite ^/rss/tags/([^/]+)/topics/?$ /rss.php?tag=$1&amp;topics=1 last;
-rewrite ^/rss/profile/([^/]+)/?$ /rss.php?profile=$1 last;
-rewrite ^/rss/view/([^/]+)/?$ /rss.php?view=$1 last;
-
-if (-f $request_filename/index.php){
-	rewrite (.*) $1/index.php;
-}
-if (!-f $request_filename){
-	rewrite (.*) /index.php;
-}
-[/sourcecode]
-
-将代码放在对应的位置即可。
-看，URL漂亮多了。</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>bbPress nginx 静态化 - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2012/07/26/bbpress-nginx-静态化/">
+                  <h2 class="entry-title">bbPress nginx 静态化</h2>
+                </a><span class="posted-on"><time datetime="2012-07-26T09:15:20.000Z">Thursday, July 26, 2012 5:15 PM</time></span></header>
+              <div class="entry-content"> 最近开始接触到bbPress这个简洁清爽的论坛程序，比起discuz它可是舒服的很，没有一些多余的无用的垃圾功能，插件也很丰富（相对）。不过，他也一样继承了wordpress的蛋疼的模板的方法。 我们现在来看看如何将它静态化： <strong>这里使用的bbPress是1.1版本，其他的版本可以类推。</strong> 我们了解到，bbPress在Apache中静态化设置是这样的： [sourcecode language=&quot;plain&quot;] RewriteRule
+                ^page/([0-9]+)/?$ /index.php?page=$1 [L,QSA] RewriteRule ^forum/([^/]+)/page/([0-9]+)/?$ /forum.php?id=$1&amp;page=$2 [L,QSA] RewriteRule ^forum/([^/]+)/?$ /forum.php?id=$1 [L,QSA] RewriteRule ^forum/?$ / [R=302,L,QSA] RewriteRule ^topic/([^/]+)/page/([0-9]+)/?$
+                /topic.php?id=$1&amp;page=$2 [L,QSA] RewriteRule ^topic/([^/]+)/?$ /topic.php?id=$1 [L,QSA] RewriteRule ^topic/?$ / [R=302,L,QSA] RewriteRule ^tags/([^/]+)/page/([0-9]+)/?$ /tags.php?tag=$1&amp;page=$2 [L,QSA] RewriteRule ^tags/([^/]+)/?$
+                /tags.php?tag=$1 [L,QSA] RewriteRule ^tags/?$ /tags.php [L,QSA] RewriteRule ^profile/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;page=$2 [L,QSA] RewriteRule ^profile/([^/]+)/([^/]+)/?$ /profile.php?id=$1&amp;tab=$2 [L,QSA] RewriteRule
+                ^profile/([^/]+)/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;tab=$2&amp;page=$3 [L,QSA] RewriteRule ^profile/([^/]+)/?$ /profile.php?id=$1 [L,QSA] RewriteRule ^profile/?$ /profile.php [L,QSA] RewriteRule ^view/([^/]+)/page/([0-9]+)/?$
+                /view.php?view=$1&amp;page=$2 [L,QSA] RewriteRule ^view/([^/]+)/?$ /view.php?view=$1 [L,QSA] RewriteRule ^rss/?$ /rss.php [L,QSA] RewriteRule ^rss/topics/?$ /rss.php?topics=1 [L,QSA] RewriteRule ^rss/forum/([^/]+)/?$ /rss.php?forum=$1
+                [L,QSA] RewriteRule ^rss/forum/([^/]+)/topics/?$ /rss.php?forum=$1&amp;topics=1 [L,QSA] RewriteRule ^rss/topic/([^/]+)/?$ /rss.php?topic=$1 [L,QSA] RewriteRule ^rss/tags/([^/]+)/?$ /rss.php?tag=$1 [L,QSA] RewriteRule ^rss/tags/([^/]+)/topics/?$
+                /rss.php?tag=$1&amp;topics=1 [L,QSA] RewriteRule ^rss/profile/([^/]+)/?$ /rss.php?profile=$1 [L,QSA] RewriteRule ^rss/view/([^/]+)/?$ /rss.php?view=$1 [L,QSA] RewriteCond %{REQUEST_FILENAME} !-f RewriteCond %{REQUEST_FILENAME} !-d RewriteRule
+                ^.*$ /index.php [L] [/sourcecode] 稍微修改一下，bbPress就可以在nginx中设置静态化链接了： [sourcecode language=&quot;plain&quot;] rewrite ^/page/([0-9]+)/?$ /index.php?page=$1 last; rewrite ^/forum/([^/]+)/page/([0-9]+)/?$ /forum.php?id=$1&amp;page=$2 last;
+                rewrite ^/forum/([^/]+)/?$ /forum.php?id=$1 last; rewrite ^/forum/?$ /; rewrite ^/topic/([^/]+)/page/([0-9]+)/?$ /topic.php?id=$1&amp;page=$2 last; rewrite ^/topic/([^/]+)/?$ /topic.php?id=$1 last; rewrite ^/topic/?$ /; rewrite ^/tags/([^/]+)/page/([0-9]+)/?$
+                /tags.php?tag=$1&amp;page=$2 last; rewrite ^/tags/([^/]+)/?$ /tags.php?tag=$1 last; rewrite ^/tags/?$ /tags.php last; rewrite ^/profile/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;page=$2 last; rewrite ^/profile/([^/]+)/([^/]+)/?$
+                /profile.php?id=$1&amp;tab=$2 last; rewrite ^/profile/([^/]+)/([^/]+)/page/([0-9]+)/?$ /profile.php?id=$1&amp;tab=$2&amp;page=$3 last; rewrite ^/profile/([^/]+)/?$ /profile.php?id=$1 last; rewrite ^/profile/?$ /profile.php last; rewrite
+                ^/view/([^/]+)/page/([0-9]+)/?$ /view.php?view=$1&amp;page=$2 last; rewrite ^/view/([^/]+)/?$ /view.php?view=$1 last; rewrite ^/rss/?$ /rss.php last; rewrite ^/rss/topics/?$ /rss.php?topics=1 last; rewrite ^/rss/forum/([^/]+)/?$ /rss.php?forum=$1
+                last; rewrite ^/rss/forum/([^/]+)/topics/?$ /rss.php?forum=$1&amp;topics=1 last; rewrite ^/rss/topic/([^/]+)/?$ /rss.php?topic=$1 last; rewrite ^/rss/tags/([^/]+)/?$ /rss.php?tag=$1 last; rewrite ^/rss/tags/([^/]+)/topics/?$ /rss.php?tag=$1&amp;topics=1
+                last; rewrite ^/rss/profile/([^/]+)/?$ /rss.php?profile=$1 last; rewrite ^/rss/view/([^/]+)/?$ /rss.php?view=$1 last; if (-f $request_filename/index.php){ rewrite (.*) $1/index.php; } if (!-f $request_filename){ rewrite (.*) /index.php;
+                } [/sourcecode] 将代码放在对应的位置即可。 看，URL漂亮多了。</div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

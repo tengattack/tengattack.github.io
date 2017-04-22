@@ -1,17 +1,80 @@
-<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="1564661980"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2012/07/21/在线galgame/" data-reactid="21"><h2 class="entry-title" data-reactid="22">在线galgame</h2></a></header><div class="entry-content" data-reactid="23">最近一直在弄在线galgame(AVG)网站，因为受到galgame的影响，我一直在想，galgame是一种很优雅的故事的展示方式，比起video，她有更优秀的场景描述能力，比起小说，她有更灵活和优雅的展示方式。虽然不能说没有缺点，但至少来说是一种人人都能自己制作的方式，比起视频制作她至少简单了几十倍。
-
-<!--more-->
-
-在一开始做之前，首先当然是搜索一番，看看有没有现成的，这一搜索果然找到了点东西，在一个博客上看到了也有人有着同样的想法： <a href="http://dmyz.org/archives/264">http://dmyz.org/archives/264</a>
-
-于是便联系了作者，由于他这个是使用python的，我打算换一个更顺手的语言php做开发，于是不得不重新建立一个框架来实现我的想法，虽然目前功能还不多，但是至少现在已经可以开始运行，并能实现基本的galgame动作了，太复杂的场景、人物的变换还不能实现，但是，如果像《eden*》这类流程较简单的游戏理论上已经是可以搬上去了。
-
-<a href="/uploads/2012/07/zaoyuhai.jpg"><img class="/uploads/2012/07/zaoyuhai.jpg" alt="" width="1282" height="921" /></a>
-<h1><strong>测试的地址：</strong></h1>
-<a href="http://zaoyuhai.com" target="_blank">http://zaoyuhai.com</a> 或 <a href="http://onlinegalgame.com" target="_blank">http://onlinegalgame.com</a>
-
-现在已经实现了很多功能，为了让游戏运行的较流程前端还有预加载，这样会让游戏场景、人物不要变得太糟糕。
-
-其实打算在游戏展示的界面使用canvas的，毕竟这个才是真正用于绘制复杂场景的的好工具，但是在后台和游戏制作方面完成之前这个暂时就维持现状了。
-
-&nbsp;</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>在线galgame - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2012/07/21/在线galgame/">
+                  <h2 class="entry-title">在线galgame</h2>
+                </a><span class="posted-on"><time datetime="2012-07-20T17:40:27.000Z">Saturday, July 21, 2012 1:40 AM</time></span></header>
+              <div class="entry-content">最近一直在弄在线galgame(AVG)网站，因为受到galgame的影响，我一直在想，galgame是一种很优雅的故事的展示方式，比起video，她有更优秀的场景描述能力，比起小说，她有更灵活和优雅的展示方式。虽然不能说没有缺点，但至少来说是一种人人都能自己制作的方式，比起视频制作她至少简单了几十倍。 在一开始做之前，首先当然是搜索一番，看看有没有现成的，这一搜索果然找到了点东西，在一个博客上看到了也有人有着同样的想法： <a href="http://dmyz.org/archives/264">http://dmyz.org/archives/264</a>                于是便联系了作者，由于他这个是使用python的，我打算换一个更顺手的语言php做开发，于是不得不重新建立一个框架来实现我的想法，虽然目前功能还不多，但是至少现在已经可以开始运行，并能实现基本的galgame动作了，太复杂的场景、人物的变换还不能实现，但是，如果像《eden*》这类流程较简单的游戏理论上已经是可以搬上去了。
+                <a href="/uploads/2012/07/zaoyuhai.jpg"><img class="/uploads/2012/07/zaoyuhai.jpg" alt width="1282" height="921" /></a>
+                <h1><strong>测试的地址：</strong></h1> <a href="http://zaoyuhai.com" target="_blank">http://zaoyuhai.com</a> 或 <a href="http://onlinegalgame.com" target="_blank">http://onlinegalgame.com</a> 现在已经实现了很多功能，为了让游戏运行的较流程前端还有预加载，这样会让游戏场景、人物不要变得太糟糕。 其实打算在游戏展示的界面使用canvas的，毕竟这个才是真正用于绘制复杂场景的的好工具，但是在后台和游戏制作方面完成之前这个暂时就维持现状了。
+                 </div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

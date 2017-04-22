@@ -1,17 +1,41 @@
-<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="-734506902"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2014/09/03/修改Windows下dnsapi.dll强制使用TCP进行DNS查询/" data-reactid="21"><h2 class="entry-title" data-reactid="22">修改Windows下dnsapi.dll强制使用TCP进行DNS查询</h2></a></header><div class="entry-content" data-reactid="23"><p>首先我承认，我一时脑洞，好好的一个人，浪费几小时去折腾这破玩意。</p>
-<p>先看看效果：<br />
-<a href="/uploads/2014/09/tcp-dns.png"><img src="/uploads/2014/09/tcp-dns.png" alt="tcp dns" width="692" height="79" class="alignnone size-full wp-image-1068" /></a><br />
-<span id="more-1067"></span><br />
-由于之前在路由上设置了内网的TCP转发，可惜DNS查询在Windows下默认使用的是UDP方式，而且居然没有修改的方式！<br />
-在网上搜索之后，发现可以通过修改 dnsapi.dll 的方式来实现强制使用TCP进行DNS查询，但是很可惜的是作者没说具体的方法。<del datetime="2014-09-03T19:49:53+00:00">妈蛋我一下子就兴奋了，这是赤裸裸地挑衅啊！</del></p>
-<p>知道该怎么做之后就是开工了，先去MSDN上看看关于 dnsapi.dll 的手册，找到下面2条：<br />
-<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682016(v=vs.85).aspx" target="_blank">http://msdn.microsoft.com/en-us/library/windows/desktop/ms682016(v=vs.85).aspx</a><br />
-<a href="http://msdn.microsoft.com/en-us/library/windows/desktop/cc982162(v=vs.85).aspx" target="_blank">http://msdn.microsoft.com/en-us/library/windows/desktop/cc982162(v=vs.85).aspx</a><br />
-<strong>DnsQuery是系统查询DNS时调用的函数，DNS Constants是一些常量，对我们接下来修改dll会很有帮助。</strong></p>
-<p>由于是Windows 8.1系统，有32位和64位的dll，我们要分析修改2次。<br />
-首先是32位的dll，这个在 C:\Windows\SysWOW64\dnsapi.dll 。<br />
-Windows下自然是用Visual Studio调试，随便写个程序来调用dnsapi：</p>
-<pre class="brush: cpp; title: ; notranslate">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>修改Windows下dnsapi.dll强制使用TCP进行DNS查询 - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2014/09/03/修改Windows下dnsapi.dll强制使用TCP进行DNS查询/">
+                  <h2 class="entry-title">修改Windows下dnsapi.dll强制使用TCP进行DNS查询</h2>
+                </a><span class="posted-on"><time datetime="2014-09-03T11:31:17Z">Wednesday, September 3, 2014 7:31 PM</time></span></header>
+              <div class="entry-content">
+                <p>首先我承认，我一时脑洞，好好的一个人，浪费几小时去折腾这破玩意。</p>
+                <p>先看看效果：<br />
+                  <a href="/uploads/2014/09/tcp-dns.png"><img src="/uploads/2014/09/tcp-dns.png" alt="tcp dns" width="692" height="79" class="alignnone size-full wp-image-1068" /></a><br /> <span id="more-1067"></span><br /> 由于之前在路由上设置了内网的TCP转发，可惜DNS查询在Windows下默认使用的是UDP方式，而且居然没有修改的方式！<br />                  在网上搜索之后，发现可以通过修改 dnsapi.dll 的方式来实现强制使用TCP进行DNS查询，但是很可惜的是作者没说具体的方法。<del datetime="2014-09-03T19:49:53+00:00">妈蛋我一下子就兴奋了，这是赤裸裸地挑衅啊！</del></p>
+                <p>知道该怎么做之后就是开工了，先去MSDN上看看关于 dnsapi.dll 的手册，找到下面2条：<br /> <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682016(v=vs.85).aspx" target="_blank">http://msdn.microsoft.com/en-us/library/windows/desktop/ms682016(v=vs.85).aspx</a><br
+                  /> <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/cc982162(v=vs.85).aspx" target="_blank">http://msdn.microsoft.com/en-us/library/windows/desktop/cc982162(v=vs.85).aspx</a><br /> <strong>DnsQuery是系统查询DNS时调用的函数，DNS Constants是一些常量，对我们接下来修改dll会很有帮助。</strong></p>
+                <p>由于是Windows 8.1系统，有32位和64位的dll，我们要分析修改2次。<br /> 首先是32位的dll，这个在 C:\Windows\SysWOW64\dnsapi.dll 。<br /> Windows下自然是用Visual Studio调试，随便写个程序来调用dnsapi：</p>
+                <pre class="brush: cpp; title: ; notranslate">
 #include &lt;Windows.h&gt;
 #include &lt;WinDNS.h&gt;
 
@@ -23,12 +47,10 @@ int main()
   return 0;
 }
 </pre>
-<p>然后就是调试，跟踪，可惜我没有去下载Windows的调试符号文件(pdb)，不然可能会更轻松点。<br />
-跟到这个：<br />
-<a href="/uploads/2014/09/dnsapi-x86.png"><img src="/uploads/2014/09/dnsapi-x86.png" alt="dnsapi-x86" width="383" height="529" class="alignnone size-full wp-image-1069" /></a><br />
-很好，在前几行断点处可以看出 [ebx] 是我们传入的Options，这里我们可以看出他在和一些常量做比较，这个 4000000h 由于在常量表(DNS Query Options)找不到值为 0x04000000 的定义，我觉得可能这个值就是保留定义的，也不大可能用上，于是决定放弃这个数值，来加上 DNS_QUERY_USE_TCP_ONLY 标志。（主要是没有调试文件搞得调了半天，也没找到其他更好的修改方式了，如果有人知道，请务必告知！）<br />
-于是，就在图中 71B34795 改成：</p>
-<pre class="brush: cpp; title: ; notranslate">
+                <p>然后就是调试，跟踪，可惜我没有去下载Windows的调试符号文件(pdb)，不然可能会更轻松点。<br /> 跟到这个：<br />
+                  <a href="/uploads/2014/09/dnsapi-x86.png"><img src="/uploads/2014/09/dnsapi-x86.png" alt="dnsapi-x86" width="383" height="529" class="alignnone size-full wp-image-1069" /></a><br /> 很好，在前几行断点处可以看出 [ebx] 是我们传入的Options，这里我们可以看出他在和一些常量做比较，这个 4000000h 由于在常量表(DNS Query Options)找不到值为
+                  0x04000000 的定义，我觉得可能这个值就是保留定义的，也不大可能用上，于是决定放弃这个数值，来加上 DNS_QUERY_USE_TCP_ONLY 标志。（主要是没有调试文件搞得调了半天，也没找到其他更好的修改方式了，如果有人知道，请务必告知！）<br /> 于是，就在图中 71B34795 改成：</p>
+                <pre class="brush: cpp; title: ; notranslate">
 __asm {
   or ecx, 2
   mov [ebx], ecx
@@ -38,8 +60,8 @@ __asm {
   nop
 }
 </pre>
-<p>这样，对于Windows 8.1的32位的 dnsapi.dll (6.3.9600.17039) 做出的修改就是：</p>
-<pre class="brush: plain; title: ; notranslate">
+                <p>这样，对于Windows 8.1的32位的 dnsapi.dll (6.3.9600.17039) 做出的修改就是：</p>
+                <pre class="brush: plain; title: ; notranslate">
 00003B95: 8B -&gt; 83
 00003B96: C1 -&gt; C9
 00003B97: 8B -&gt; 02
@@ -51,15 +73,13 @@ __asm {
 00003B9D: 00 -&gt; 90
 00003B9E: 04 -&gt; 90
 </pre>
-<p>下面就是64位的dll，这个在 C:\Windows\System32\dnsapi.dll 。<br />
-调试的方法和32位的相同，记得要更换编译方式，然后开始调试反汇编代码。<br />
-<a href="/uploads/2014/09/dnsapi-x64.png"><img src="/uploads/2014/09/dnsapi-x64.png" alt="dnsapi-x64" width="560" height="341" class="alignnone size-full wp-image-1070" /></a><br />
-这里找到的代码和32位的大致相同。接下来打开IDA找到这个代码的位置。<br />
-<a href="/uploads/2014/09/dnsapi-x64-3.png"><img src="/uploads/2014/09/dnsapi-x64-3.png" alt="dnsapi-x64-3" width="320" height="405" class="alignnone size-large wp-image-1072" /></a><br />
-将其改成这个样子：<br />
-<a href="/uploads/2014/09/dnsapi-x64-4.png"><img src="/uploads/2014/09/dnsapi-x64-4.png" alt="dnsapi-x64-4" width="259" height="196" class="alignnone size-large wp-image-1073" /></a></p>
-<p>这样，对于Windows 8.1的64位的 dnsapi.dll (6.3.9600.17039) 做出的修改就是：</p>
-<pre class="brush: plain; title: ; notranslate">
+                <p>下面就是64位的dll，这个在 C:\Windows\System32\dnsapi.dll 。<br /> 调试的方法和32位的相同，记得要更换编译方式，然后开始调试反汇编代码。<br />
+                  <a href="/uploads/2014/09/dnsapi-x64.png"><img src="/uploads/2014/09/dnsapi-x64.png" alt="dnsapi-x64" width="560" height="341" class="alignnone size-full wp-image-1070" /></a><br /> 这里找到的代码和32位的大致相同。接下来打开IDA找到这个代码的位置。<br />
+                  <a href="/uploads/2014/09/dnsapi-x64-3.png"><img src="/uploads/2014/09/dnsapi-x64-3.png" alt="dnsapi-x64-3" width="320" height="405" class="alignnone size-large wp-image-1072" /></a><br /> 将其改成这个样子：<br />
+                  <a href="/uploads/2014/09/dnsapi-x64-4.png"><img src="/uploads/2014/09/dnsapi-x64-4.png" alt="dnsapi-x64-4" width="259" height="196" class="alignnone size-large wp-image-1073" /></a>
+                </p>
+                <p>这样，对于Windows 8.1的64位的 dnsapi.dll (6.3.9600.17039) 做出的修改就是：</p>
+                <pre class="brush: plain; title: ; notranslate">
 00002C07: 0F -&gt; 83
 00002C08: BA -&gt; C8
 00002C09: E0 -&gt; 02
@@ -71,13 +91,59 @@ __asm {
 00002C0F: 04 -&gt; 90
 00002C10: 00 -&gt; 90
 </pre>
-<p>这样就算搞定了，强制设置上 DNS_QUERY_USE_TCP_ONLY 这个标志，也就是强制走TCP。</p>
-<p>然后我们需要把文件拷回去，记得先要修改对应目录下的文件的安全性，然后改名成 dnsapi.dll.bak 做个备份，最后把我们的修改后的文件拷贝进去就好了。<br />
-<a href="/uploads/2014/09/fix-files.png"><img src="/uploads/2014/09/fix-files.png" alt="fix files" width="780" height="605" class="alignnone size-full wp-image-1074" /></a></p>
-<p>最好重启一下，然后就可以在Wireshark中看到效果啦~<br />
-<a href="/uploads/2014/09/tcp-dns.png"><img src="/uploads/2014/09/tcp-dns.png" alt="tcp dns" width="692" height="79" class="alignnone size-full wp-image-1068" /></a></p>
-<p>最后附上我修改好32位和64位的 dnsapi.dll (6.3.9600.17039) 文件：<br />
-<a href="https://bless.moe/io/win/mod/dnsapi/" target="_blank">https://bless.moe/io/win/mod/dnsapi/</a></p>
-<p>另外，我们需要注意一点，像<strong>在 chrome://flags/ 开启了实验性异步 DNS 客户端的 Chrome</strong> 等软件会使用自带的DNS客户端，不走系统的DNS解析，所以可能还是UDP方式查询DNS。<br />
--<del datetime="2014-09-03T19:33:24+00:00">我费了这么大力气，就为了写篇文章都不行嘛，其实我觉得拿这玩意去投稿的话也能赚点稿费就是了</del>-</p>
-</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>
+                <p>这样就算搞定了，强制设置上 DNS_QUERY_USE_TCP_ONLY 这个标志，也就是强制走TCP。</p>
+                <p>然后我们需要把文件拷回去，记得先要修改对应目录下的文件的安全性，然后改名成 dnsapi.dll.bak 做个备份，最后把我们的修改后的文件拷贝进去就好了。<br />
+                  <a href="/uploads/2014/09/fix-files.png"><img src="/uploads/2014/09/fix-files.png" alt="fix files" width="780" height="605" class="alignnone size-full wp-image-1074" /></a>
+                </p>
+                <p>最好重启一下，然后就可以在Wireshark中看到效果啦~<br />
+                  <a href="/uploads/2014/09/tcp-dns.png"><img src="/uploads/2014/09/tcp-dns.png" alt="tcp dns" width="692" height="79" class="alignnone size-full wp-image-1068" /></a>
+                </p>
+                <p>最后附上我修改好32位和64位的 dnsapi.dll (6.3.9600.17039) 文件：<br /> <a href="https://bless.moe/io/win/mod/dnsapi/" target="_blank">https://bless.moe/io/win/mod/dnsapi/</a></p>
+                <p>另外，我们需要注意一点，像<strong>在 chrome://flags/ 开启了实验性异步 DNS 客户端的 Chrome</strong> 等软件会使用自带的DNS客户端，不走系统的DNS解析，所以可能还是UDP方式查询DNS。<br /> -<del datetime="2014-09-03T19:33:24+00:00">我费了这么大力气，就为了写篇文章都不行嘛，其实我觉得拿这玩意去投稿的话也能赚点稿费就是了</del>-</p>
+              </div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

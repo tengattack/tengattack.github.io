@@ -1,5 +1,77 @@
-<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="418784817"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2012/07/28/新浪云商店的apache居然没有默认开启gzip/" data-reactid="21"><h2 class="entry-title" data-reactid="22">新浪云商店的Apache居然没有默认开启gzip</h2></a></header><div class="entry-content" data-reactid="23">坑爹，今天去商店的管理中心看了看，只用了55小时居然烧了18%的流量，我擦，这是什么概念。
-加上页面打开速度有点慢，我突然就想到是不是没开gzip
-<span style="color: #ffff00;"><strong>右键审查元素，我擦，吓傻了，翻来覆去找不到Content-Encoding，这坑爹的！</strong></span>
-
-没办法，只能自己建个.htaccess来解决了，云商店的wp的文件管理还得自己传插件上来弄，唉，真坑爹。</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>新浪云商店的Apache居然没有默认开启gzip - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2012/07/28/新浪云商店的apache居然没有默认开启gzip/">
+                  <h2 class="entry-title">新浪云商店的Apache居然没有默认开启gzip</h2>
+                </a><span class="posted-on"><time datetime="2012-07-28T14:52:10.000Z">Saturday, July 28, 2012 10:52 PM</time></span></header>
+              <div class="entry-content">坑爹，今天去商店的管理中心看了看，只用了55小时居然烧了18%的流量，我擦，这是什么概念。 加上页面打开速度有点慢，我突然就想到是不是没开gzip <span style="color: #ffff00;"><strong>右键审查元素，我擦，吓傻了，翻来覆去找不到Content-Encoding，这坑爹的！</strong></span> 没办法，只能自己建个.htaccess来解决了，云商店的wp的文件管理还得自己传插件上来弄，唉，真坑爹。</div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

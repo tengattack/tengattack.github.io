@@ -1,93 +1,84 @@
-<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="-1956477490"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2012/07/26/nodejs在freebsd上的配置/" data-reactid="21"><h2 class="entry-title" data-reactid="22">nodejs+nginx在FreeBSD上的配置</h2></a></header><div class="entry-content" data-reactid="23">看了些nodejs的文档，她给我的感觉就像是几年前的php，不得不说，现在的php给我的感觉就像是个臃肿的大汉，虽然php-5.4好了点，但php这东西还是太坑。
-
-于是乎，我便打算自己装个nodejs在服务器上玩玩。
-
-<!--more-->
-
-先去nodejs官网 <a href="http://nodejs.org/#download">http://nodejs.org/#download</a> 下源代码到服务器上，我现在的最新版本是node-v0.8.4.tar.gz <a href="http://nodejs.org/dist/v0.8.4/node-v0.8.4.tar.gz">http://nodejs.org/dist/v0.8.4/node-v0.8.4.tar.gz</a>
-
-解压并安装之：（居然要使用gmake）
-tar zxvf node-v0.8.4.tar.gz
-./configure --prefix=/usr/local/node --shared-zlib --shared-openssl
-gmake install
-<a href="/uploads/2012/07/nodejs编译.jpg"><img class="/uploads/2012/07/nodejs编译.jpg" alt="" width="675" height="319" /></a>
-
-然后发现出现这样的错误：
-
-gmake[1]: *** [/usr/local/src/node-v0.8.4/out/Release/obj.target/v8_base/deps/v8/src/platform-freebsd.o] Error 1
-gmake[1]: Leaving directory `/usr/local/src/node-v0.8.4/out'
-gmake: *** [node] Error 2
-
-这是因为没装libexec、openssl
-
-cd /usr/ports/devel/libexecinfo
-make install clean
-
-cd /usr/ports/security/openssl
-make install clean
-
-装上就ok了
-
-继续编译吧。
-
-最后再次出现个个蛋疼的错误：
-bash "/usr/local/node/lib/node_modules/npm/scripts/relocate.sh" /usr/local/node/bin/node
-bash: not found
-
-这是因为FreeBSD中好像原本是没有bash这东西的，只有sh
-我们可以直接链接一下sh
-ln /bin/sh /bin/bash
-
-然后继续编译，或者直接
-sh "/usr/local/node/lib/node_modules/npm/scripts/relocate.sh" /usr/local/node/bin/node
-
-因为这就是最后一步了。
-
-因为我在安装nodejs是指定了路径，我们为了能让他直接执行，我们需要ln一下
-ln -s /usr/local/node/bin/node /usr/local/bin/node
-ln -s /usr/local/node/bin/npm /usr/local/bin/npm
-rehash
-
-用 node -v 和 npm -v 检查一下吧！
-
-编辑一个主页
-vi index.js
-
-[code lang="js"]
-var http = require('http');
-
-http.createServer(function (request, response) {
-  response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.end('hello world\n');
-}).listen(1104);
-
-console.log('Server running at http://localhost:1104/');
-[/code]
-
-在nginx上用代理转到nodejs上
-[sourcecode language="plain"]
-    server {
-        listen       80;
-        server_name  node.mgsdyg.com;
-
-        location / {
-            proxy_pass http://localhost:1104/;
-            proxy_send_timeout 30;
-            proxy_read_timeout 30;
-            proxy_buffers 4 64k;
-            proxy_busy_buffers_size 64k;
-            proxy_temp_file_write_size 64k;
-            proxy_set_header X-Real-IP $remote_addr;
-        }
-
-        location ~* \.(gif|png|jpg|jpeg|bmp|css|js|swf)$ {
-            root /usr/local/www/mgsdyg/node;
-            expires 15d;
-        }
-    }
-[/sourcecode]
-
-可以试试了，运行
-node index.js
-
-然后去浏览器访问吧。</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>nodejs+nginx在FreeBSD上的配置 - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2012/07/26/nodejs在freebsd上的配置/">
+                  <h2 class="entry-title">nodejs+nginx在FreeBSD上的配置</h2>
+                </a><span class="posted-on"><time datetime="2012-07-26T11:20:28.000Z">Thursday, July 26, 2012 7:20 PM</time></span></header>
+              <div class="entry-content">看了些nodejs的文档，她给我的感觉就像是几年前的php，不得不说，现在的php给我的感觉就像是个臃肿的大汉，虽然php-5.4好了点，但php这东西还是太坑。 于是乎，我便打算自己装个nodejs在服务器上玩玩。 先去nodejs官网 <a href="http://nodejs.org/#download">http://nodejs.org/#download</a> 下源代码到服务器上，我现在的最新版本是node-v0.8.4.tar.gz <a href="http://nodejs.org/dist/v0.8.4/node-v0.8.4.tar.gz">http://nodejs.org/dist/v0.8.4/node-v0.8.4.tar.gz</a>                解压并安装之：（居然要使用gmake） tar zxvf node-v0.8.4.tar.gz ./configure --prefix=/usr/local/node --shared-zlib --shared-openssl gmake install
+                <a href="/uploads/2012/07/nodejs编译.jpg"><img class="/uploads/2012/07/nodejs编译.jpg" alt width="675" height="319" /></a> 然后发现出现这样的错误： gmake[1]: *** [/usr/local/src/node-v0.8.4/out/Release/obj.target/v8_base/deps/v8/src/platform-freebsd.o] Error 1 gmake[1]: Leaving directory `/usr/local/src/node-v0.8.4/out'
+                gmake: *** [node] Error 2 这是因为没装libexec、openssl cd /usr/ports/devel/libexecinfo make install clean cd /usr/ports/security/openssl make install clean 装上就ok了 继续编译吧。 最后再次出现个个蛋疼的错误： bash &quot;/usr/local/node/lib/node_modules/npm/scripts/relocate.sh&quot;
+                /usr/local/node/bin/node bash: not found 这是因为FreeBSD中好像原本是没有bash这东西的，只有sh 我们可以直接链接一下sh ln /bin/sh /bin/bash 然后继续编译，或者直接 sh &quot;/usr/local/node/lib/node_modules/npm/scripts/relocate.sh&quot; /usr/local/node/bin/node 因为这就是最后一步了。 因为我在安装nodejs是指定了路径，我们为了能让他直接执行，我们需要ln一下
+                ln -s /usr/local/node/bin/node /usr/local/bin/node ln -s /usr/local/node/bin/npm /usr/local/bin/npm rehash 用 node -v 和 npm -v 检查一下吧！ 编辑一个主页 vi index.js [code lang=&quot;js&quot;] var http = require('http'); http.createServer(function (request,
+                response) { response.writeHead(200, {'Content-Type': 'text/plain'}); response.end('hello world\n'); }).listen(1104); console.log('Server running at http://localhost:1104/'); [/code] 在nginx上用代理转到nodejs上 [sourcecode language=&quot;plain&quot;]
+                server { listen 80; server_name node.mgsdyg.com; location / { proxy_pass http://localhost:1104/; proxy_send_timeout 30; proxy_read_timeout 30; proxy_buffers 4 64k; proxy_busy_buffers_size 64k; proxy_temp_file_write_size 64k; proxy_set_header
+                X-Real-IP $remote_addr; } location ~* \.(gif|png|jpg|jpeg|bmp|css|js|swf)$ { root /usr/local/www/mgsdyg/node; expires 15d; } } [/sourcecode] 可以试试了，运行 node index.js 然后去浏览器访问吧。</div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
