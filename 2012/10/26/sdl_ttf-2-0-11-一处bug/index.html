@@ -1,0 +1,42 @@
+<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="562085425"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2012/10/26/sdl_ttf-2-0-11-一处bug/" data-reactid="21"><h2 class="entry-title" data-reactid="22">SDL_ttf-2.0.11 一处bug(?)</h2></a></header><div class="entry-content" data-reactid="23">最近在研究ONScripter，自然是下载下源代码来研究。
+
+由于ONS依赖SDL的库，包括SDL、SDL_image、SDL_ttf等许多开源库，我自然是全部下载下来研究了。
+全部编译好link之后发现程序可以ONS执行但是却显示不了对话的文本，
+调试了一早上和中午发现，显示不了文本的问题不是出现在ONS的代码里，而是在SDL_ttf库里。
+<!--more-->
+在SDL_ttf.c的TTF_RenderGlyph_Shaded函数中，有一段这样的代码: 
+
+[code lang="cpp"]
+	/* Copy the character from the pixmap */
+	src = glyph-&gt;pixmap.buffer;
+	dst = (Uint8*) textbuf-&gt;pixels;
+
+	for ( row = 0; row &lt; glyph-&gt;bitmap.rows; ++row ) {
+		memcpy( dst, src, glyph-&gt;pixmap.width );
+		src += glyph-&gt;pixmap.pitch;
+		dst += textbuf-&gt;pitch;
+	}
+[/code]
+
+而这明显是有问题的，不管是从注释还是for里面的代码来看，glyph->bitmap.rows 应该为 glyph->pixmap.rows
+而如果是 glyph->bitmap.rows 的话，在这里 glyph->bitmap.rows 为0，也就是说什么character数据也拷贝不到，也就自然无法显示文字。
+
+我们把 glyph->bitmap.rows 修改为 glyph->pixmap.rows:
+
+[code lang="cpp"]
+	/* Copy the character from the pixmap */
+	src = glyph-&gt;pixmap.buffer;
+	dst = (Uint8*) textbuf-&gt;pixels;
+	//glyph-&gt;bitmap.rows -&gt; glyph-&gt;pixmap.rows by TengAttack
+	for ( row = 0; row &lt; glyph-&gt;pixmap.rows; ++row ) {
+		memcpy( dst, src, glyph-&gt;pixmap.width );
+		src += glyph-&gt;pixmap.pitch;
+		dst += textbuf-&gt;pitch;
+	}
+[/code]
+
+重新编译SDL_ttf库，再重新链接ONS即可。
+
+<a href="/uploads/2012/10/onscripter-sdl_ttf.png"><img src="/uploads/2012/10/onscripter-sdl_ttf.png" alt="" title="onscripter-sdl_ttf" width="1127" height="539" class="alignnone size-full wp-image-255" /></a>
+
+</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>

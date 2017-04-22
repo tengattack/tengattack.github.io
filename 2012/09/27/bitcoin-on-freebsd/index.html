@@ -1,0 +1,146 @@
+<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="1251207479"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2012/09/27/bitcoin-on-freebsd/" data-reactid="21"><h2 class="entry-title" data-reactid="22">bitcoin on FreeBSD</h2></a></header><div class="entry-content" data-reactid="23"><strong>最近有幸从朋友那里了解到bitcoin的相关信息，作为一个技术宅对这种东西自然是感到了莫大的兴趣，现在我们就从编译执行到挖矿（miner）一一道来。</strong>
+<a href="/uploads/2012/09/20120927004609.png"><img class="/uploads/2012/09/20120927004609.png" alt="" width="558" height="185" /></a>上图是笔者编译好的cpuminer在FreeBSD上的运行状况
+
+<strong><span style="color: #ccffcc;">首先我想说的是坑爹，真的坑爹，折腾得我肩膀都酸了 TAT</span></strong>
+
+<!--more-->
+<h1>1. 编译(Compiling Bitcoin on FreeBSD-8.2)</h1>
+<strong><span style="color: #ccffff;">如果你只想要集体挖矿的话那就直接往下看第2节吧。</span></strong>
+
+说到在FreeBSD上编译最常用的自然是ports，但是我这里ports最新版的只有v0.4，而官网在这个时间点已经是v0.7了，<span style="color: #ffff00;"><strong>这自然不符合我的美学</strong></span>。
+为了替换成v0.7，我们还是先make一下v0.4版本的。
+cd /usr/ports/net-p2p/bitcoin
+make
+
+make完成之后能看到一个work的文件夹，进入后发现就是一些patch和config文件和他的主要代码目录。
+这个代码目录看起来很像是github上下载后解压的，知道文件的位置基本就ok了
+我们接着去编辑distinfo和Makefile
+distinfo:
+
+[sourcecode language="plain"]
+SHA256 (bitcoin/v0.4.0) = 4feb67c2191ae3c7ebfbcd2fbc98bfdb01242a63f9d9158f5a75482542f02d11
+SIZE (bitcoin/v0.4.0) = 896167
+[/sourcecode]
+
+加上两行，复制前面的即可，把版本号改成最新版，我这里是0.7.0
+<span style="color: #ffff99;"><strong>这些SHA256和SIZE根据你下载的包改就ok，或者直接复制上面的，反正make可以用参数关掉checksum</strong></span>
+改成像这样就行：
+
+[sourcecode language="plain"]
+SHA256 (bitcoin/v0.4.0) = 4feb67c2191ae3c7ebfbcd2fbc98bfdb01242a63f9d9158f5a75482542f02d11
+SIZE (bitcoin/v0.4.0) = 896167
+SHA256 (bitcoin/v0.7.0) = 4feb67c2191ae3c7ebfbcd2fbc98bfdb01242a63f9d9158f5a75482542f02d11
+SIZE (bitcoin/v0.7.0) = 1752183
+[/sourcecode]
+
+Makefile:
+如下方式修改，版本号和后面的hash自己翻（去github上可以看到 <a href="https://github.com/bitcoin/bitcoin">https://github.com/bitcoin/bitcoin</a> ）
+
+[sourcecode language="plain"]
+PORTVERSION= 0.4.0
+WRKSRC= ${WRKDIR}/bitcoin-bitcoin-[xxxxx忘记是啥了]/src
+[/sourcecode]
+
+改成:
+
+[sourcecode language="plain"]
+PORTVERSION= 0.7.0
+WRKSRC= ${WRKDIR}/bitcoin-bitcoin-a76c22e/src
+[/sourcecode]
+
+<strong>注意bitcoin-bitcoin-a76c22e要和你用的版本解压出来的文件夹名字相同才行。</strong>
+然后make即可，<span style="color: #99ccff;"><strong>注意如果你没有kde或者gnome的话就不要开GUI模式了</strong></span>，我就是蛋疼的开了GUI一开始没注意到，结果给跪了，从ports中编译了一堆东西，如果不小心点过了Ctrl+C结束之后用make config重新设置。
+
+编译：
+
+[sourcecode language="plain"]
+init.cpp: In function 'bool AppInit2()':
+init.cpp:548: error: 'yes' was not declared in this scope
+[/sourcecode]
+
+我这里这个版本的代码有点问题（开了UPNP），需要改init.cpp
+
+[code lang="cpp"]
+fUseUPnP = GetBoolArg(&quot;-upnp&quot;, USE_UPNP);
+[/code]
+
+将其中的USE_UPNP改成true即可。
+
+如果你的home目录够大那就直接在~/.bitcoin/下建立配置文件bitcoin.conf:
+
+[sourcecode language="plain"]
+server=1
+rpcconnect=127.0.0.1
+rpcport=8332
+rpcuser=tengattack
+rpcpassword=[yourpassword]
+[/sourcecode]
+
+还有更多的配置，可以去这里看看 <a href="https://en.bitcoin.it/wiki/Running_Bitcoin">https://en.bitcoin.it/wiki/Running_Bitcoin</a>
+
+如果指定了数据储存的目录就用 -datadir= ，指定了配置文件就用 -conf= ，其他的参数用 --help 自己看看吧。
+<h1>2. 挖矿(Miner)</h1>
+有比较多的程序都能进行挖矿，也分集体挖矿和自己挖，自己挖被朋友称为个体户，蛮有意思一_一
+常用的挖矿程序（非脚本程序）有
+<a href="https://github.com/jgarzik/cpuminer">cpuminer</a>、<a href="https://github.com/ckolivas/cgminer">cgminer</a>、<a href="https://github.com/luke-jr/bfgminer">bfgminer</a>等，在她的wiki上能找到各种很多东西<a href="https://en.bitcoin.it/wiki/">https://en.bitcoin.it/wiki/</a>
+
+其中提到的cgminer、bfgminer都是支持GPU运算的，这样就可以相当快的挖矿了=w=
+
+因为我是用服务器资源，上面没有比较强劲的显卡，我就挑选了cpuminer来编译
+（其实cgminer我也去编译了一下，用--enable-cpumining --disable-opencl可以使用cpu运算，不过不知为啥我编译好后运行了算不了- -）
+
+<strong><span style="color: #ccffff;">先来说说我编译cpuminer的血泪经历。</span></strong>
+<strong><span style="color: #ccffff;"> 自然是先把依赖库libcurl和jansson装上，没啥特别注意的自然是用默认配置。</span></strong>
+<strong><span style="color: #ccffff;"> 然后configure cpuminer的时候就出问题了，首先是在用autogen.sh的时候提示缺少宏 AC_MSG_ERROR</span></strong>
+<strong><span style="color: #ccffff;"> 然后在configure提示没有找到jansson，无奈我便重新编译了jansson，configure时加上了参数--prefix=/usr</span></strong>
+<strong><span style="color: #ccffff;"> 再次configure:</span></strong>
+<strong><span style="color: #ccffff;"> configure: line 5050: syntax error near unexpected token `LIBCURL_CHECK_CONFIG' ……</span></strong>
+<strong><span style="color: #ccffff;"> 我明明装好了libcurl了啊，搜了好久的资料，看到作者是这样解释的：不是按照系统给的默认方式装的，autogen找不到你的libcurl，跪，怎么其他的都没问题就你的这么娇气。</span></strong>
+<strong><span style="color: #ccffff;"> 没办法，注释掉configure 5050行(<strong>这里的5050行是在错误代码中发现的，不同版本的可能不一样</strong>)和下一行的代码，再次configure，果断通过了</span></strong>
+<strong><span style="color: #ccffff;"> 在激动的心情下make，gcc提示错误未知的参数: @LIBCURL_CPPFLAGS@ @LIBCURL@，一看，果断是libcurl没找到的问题，折腾了好久，一度想要放弃，最后还是坚持下来了。</span></strong>
+<strong><span style="color: #ccffff;"> 我现在/usr/local/lib下找到了libcurl.a文件，去Makefile中加上了这个文件链接，去掉了@LIBCURL_CPPFLAGS@ @LIBCURL@，</span></strong>
+<strong><span style="color: #ccffff;"> 然后果断到link了，发现悲剧的我这个libcurl是支持ssl的，所以还需要openssl的库，一般来说就挖个矿要啥ssl啊，然后我重新编译了个libcurl.a不带openssl的(在ports中make config关掉ssl支持即可)，然后编译，发现还是少函数，目测是zlib的，然后又跑去zlib目录，编译出了个libz.a的文件，果断添加上去，make，一闪完了。</span></strong>
+<strong><span style="color: #ccffff;"> 不敢相信，再次make一下，<span style="color: #ff99cc;"><em>啊啊，啊啊啊，成功了啊！我当时就差没泪流满面了，从下午到晚上一直在折腾这个东西终于弄完了，那种心情太好了！</em></span></span></strong>
+
+接下来说说编译的过程：
+<span style="color: #ccffff;"><strong>要先装有automake哦~</strong></span>
+首先在其github上的README上看到需要libcurl和jansson库，jansson去他给的链接下下来就可以了，解压，注意./configure最好设置一下--prefix:
+./configure --prefix=/usr
+make install
+至于libcurl和zlib，把她们编译出来的.a文件拷到/usr/local/lib下就好了，其中curl本身install之后的libcurl.a文件就是在那个目录下的，我们去编译zlib，只make，不安装，然后在代码目录下找到libz.a拷到lib目录下即可（不拷也可以，只不过拷了方便点）。
+
+然后她的github找git链接直接git clone把代码下载下来。
+
+git clone git://github.com/jgarzik/cpuminer.git
+cd cpuminer
+./autogen.sh
+编辑 ./configure
+去掉或注释掉5050行(<strong>这里的5050行是在错误代码中发现的，不同版本的可能不一样</strong>)及其下一行
+
+然后:
+./configure
+编辑 Makefile
+先照README修改一下编译的方式，找-O2，然后看到CFLAGS，把相应的地方改成:
+
+[sourcecode language="plain"]
+CFLAGS = -O3 -Wall -msse2
+[/sourcecode]
+
+然后找LIBCURL，把相关的地方改成(注意 libcurl.a 是要没有开启ssl的):
+
+[sourcecode language="plain"]
+minerd_LDADD = /usr/local/lib/libcurl.a /usr/local/lib/libz.a -ljansson -lpthread $(am__append_2)
+minerd_CPPFLAGS =
+[/sourcecode]
+
+最后:
+make install
+
+因为默认是安装在/usr/local/bin
+<span style="color: #ffcc99;"><strong>好像最后还有点奇怪的问题，但这都不影响了，我们直接用 /usr/local/bin/minerd 就能启动了，好开心啊wwww</strong></span>
+
+如果你是在<a href="https://www.btcguild.com">btcguild</a>注册的集体挖矿，使用如下命令即可：
+/usr/local/bin/minerd --threads 3 --url http://mine2.btcguild.com:8332/ --userpass tengattack_2:123
+<span style="color: #ccffff;"><strong>线程根据需要修改，用户密码替换成自己的就好了。</strong></span>
+
+<strong><span style="color: #ffff99;">ps. 这次用cpuminer测试了一下，发现服务器的CPU速度还不如我用的电脑快 - -</span></strong></div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>

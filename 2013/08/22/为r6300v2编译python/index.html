@@ -1,0 +1,109 @@
+<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="-1335818082"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2013/08/22/为r6300v2编译python/" data-reactid="21"><h2 class="entry-title" data-reactid="22">为R6300v2编译python</h2></a></header><div class="entry-content" data-reactid="23">前不久入了一个R6300v2:
+<a href="/uploads/2013/08/IMG_2598.jpg"><img src="/uploads/2013/08/IMG_2598.jpg" alt="IMG_2598" width="768" height="1024" class="alignnone size-full wp-image-758" /></a>
+
+大家可以在wikidevi上看到它的硬件配置:
+<a href="http://wikidevi.com/wiki/Netgear_R6300_v2" target="_blank">http://wikidevi.com/wiki/Netgear_R6300_v2</a>
+CPU是Broadcom BCM47081A0 (800 MHz)，我们可以在Broadcom官网上看到他的一些详细信息:
+<a href="http://www.broadcom.com/products/Wireless-LAN/802.11-Wireless-LAN-Solutions/BCM4707-4708-4709" target="_blank">http://www.broadcom.com/products/Wireless-LAN/802.11-Wireless-LAN-Solutions/BCM4707-4708-4709</a>
+
+这么好的配置不用来折腾简直就是浪费。一直期待着能刷系统……直到最近，出了个R6300v2的dd-wrt固件:
+<a href="http://www.myopenrouter.com/download/50404/DD-WRT-for-R6300v2/" target="_blank">http://www.myopenrouter.com/download/50404/DD-WRT-for-R6300v2/</a>
+
+不过还是beta版，很多功能还不怎么好，本人刷了之后最蛋疼的就是Mac OS X不能搜到dd-wrt的5G网络，但同设备的Windows却可以，非常郁闷……
+不过这不是我们这次讨论的重点
+<!--more-->
+我们可以在固件下载页面中找到源码，下载后我们查看Build Instructions可以发现使用的工具链是hndtools-arm-linux-2.6.36-uclibc-4.5.3，当然你也可以用你喜欢的工具链，但是可能需要重新编译一下固件了……
+
+另外这个使用的工具链我没找到在哪里可以下，不过我倒是在github上看到了:
+<a href="https://github.com/RMerl/asuswrt-merlin/tree/master/release/src-rt-6.x.4708/toolchains/hndtools-arm-linux-2.6.36-uclibc-4.5.3" target="_blank">https://github.com/RMerl/asuswrt-merlin/tree/master/release/src-rt-6.x.4708/toolchains/hndtools-arm-linux-2.6.36-uclibc-4.5.3</a>
+当然，你也可以用buildroot自己配置一个出来……
+
+<strong>本人一开始用错工具链搞得各种符号有问题，各种奇葩的问题</strong>，比如这样:
+<a href="/uploads/2013/08/pythonoo-error.png"><img src="/uploads/2013/08/pythonoo-error.png" alt="pythonoo-error" width="598" height="233" class="alignnone size-full wp-image-763" /></a>
+就算是这样还是我费劲千辛万苦，去掉ctype的依赖(比如toupper等函数)之后的结果……好不容易能运行python了，但是组件…………
+
+<strong>后来换回来之后一切非常顺利</strong>
+说了这么多，我们还是来看看如何编译python吧，其实我们更需要的是编译一些python的组件，比如pyOpenSSL等
+
+当然，我们的编译环境在Ubuntu下
+编译OpenSSL的命令非常简单，关于源码下载什么的我就不说了，没意思。prefix可根据自己的需要修改
+[sourcecode language="plain"]
+CC=arm-linux-gcc CXX=arm-linux-g++ AR=arm-linux-ar RANLIB=arm-linux-ranlib ./Configure no-asm shared --prefix=/usr/local/arm/ssl linux-armv4
+[/sourcecode]
+配置完成后就是make了
+
+编译libevent和zlib也差不多:
+[sourcecode language="plain"]
+CC=arm-linux-gcc CXX=arm-linux-g++ AR=arm-linux-ar RANLIB=arm-linux-ranlib ./configure --prefix=/usr/local/arm/libevent --host=arm-linux
+make
+make install
+[/sourcecode]
+[sourcecode language="plain"]
+CC=arm-linux-gcc CXX=arm-linux-g++ AR=arm-linux-ar RANLIB=arm-linux-ranlib ./configure --prefix=/usr/local/arm/zlib
+make
+make install
+[/sourcecode]
+
+之后就是编译python及其的组件了，我主要是参考了这里:
+<a href="http://randomsplat.com/id5-cross-compiling-python-for-embedded-linux.html" target="_blank">http://randomsplat.com/id5-cross-compiling-python-for-embedded-linux.html</a>
+写得非常详细，我编译的版本是2.7.3。不过我没有编译SQLite就是了，主要是因为用不上……
+
+为了让编译组件的时候能找到对应的头文件和库，我们在patch后还需要自己手工修改一下setup.py，在detect_modules（patch过）中找好为交叉编译设置搜索路径的地方，加上我们编译的库，这里我还加上了ncurses（本来想装个screen），但是最后事实证明，在R6300v2上的dd-wrt上完全用不上……
+[sourcecode language="python"]
+            lib_dirs += [
+                '/usr/local/arm/zlib/lib', '/usr/local/arm/ssl/lib', '/usr/local/arm/ncurses/lib'
+                ]
+            inc_dirs += [
+                '/usr/local/arm/zlib/include', '/usr/local/arm/ssl/include', '/usr/local/arm/ncurses/include/ncursesw', '/usr/local/arm/ncurses/include'
+                ]
+[/sourcecode]
+
+然后按照那里写的方法编译就好了，主要原理就是先编译一个host的python，可以在机器上跑，其实我们可以直接用系统带的python2.7
+接下来就是编译其他的python组件，弄成egg在dd-wrt上用easy_install装就好了
+
+先准备好setuptools（目录与Python源码目录同一目录下）
+下载并解压 <a href="https://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz#md5=7df2a529a074f613b509fb44feefe74e" target="_blank">https://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz#md5=7df2a529a074f613b509fb44feefe74e</a>
+这不是最新版，大家想要的话可以尝试最新版
+
+编译pyOpenSSL（目录与Python源码目录同一目录下）:
+[sourcecode language="plain"]
+cd pyOpenSSL-0.13/
+OPENSSL=/usr/local/arm/ssl
+PYTHONPATH=../Python-2.7.3/Lib ../Python-2.7.3/hostpython setup.py build_ext -I$OPENSSL/include -L$OPENSSL
+sed -i -e &quot;s|from distutils.core import Extension, setup|from setuptools import setup\nfrom distutils.core import Extension|g&quot; setup.py
+PYTHONPATH=../Python-2.7.3/Lib:../setuptools-0.6c11 ../Python-2.7.3/hostpython setup.py bdist_egg
+mv dist/pyOpenSSL-0.13-py2.7-linux-i686.egg dist/pyOpenSSL-0.13-py2.7.egg
+[/sourcecode]
+
+编译greenlet:
+[sourcecode language="plain"]
+CC=arm-linux-gcc CXX=arm-linux-g++ AR=arm-linux-ar RANLIB=arm-linux-ranlib gcc=arm-linux-gcc ar=arm-linux-ar ranlib=arm-linux-ranlib ld=arm-linux-ld PYTHONPATH=/usr/lib/ python setup.py build_ext -I../Python-2.7.3/Include
+#这里可能需要修改/usr/bin下的ld和gcc，链接到arm-linux的，完成编译后记得改回来
+sed -i -e &quot;s|from distutils.core import Extension, setup|from setuptools import setup\nfrom distutils.core import Extension|g&quot; setup.py
+PYTHONPATH=../setuptools-0.6c11 python2.7 setup.py bdist_egg
+mv dist/greenlet-0.4.1-py2.7-linux-i686.egg dist/greenlet-0.4.1-py2.7.egg
+[/sourcecode]
+
+编译gevent:
+[sourcecode language="plain"]
+LIBEVENT=/usr/local/arm/libevent
+PYTHONPATH=../Python-2.7.3/Lib ../Python-2.7.3/hostpython setup.py build_ext -I$LIBEVENT/include -L$LIBEVENT/lib
+sed -i -e &quot;s|from distutils.core import Extension, setup|from setuptools import setup\nfrom distutils.core import Extension|g&quot; setup.py
+PYTHONPATH=../Python-2.7.3/Lib:../setuptools-0.6c11 ../Python-2.7.3/hostpython setup.py bdist_egg
+mv dist/gevent-0.13.8-py2.7-linux-i686.egg dist/gevent-0.13.8-py2.7.egg
+[/sourcecode]
+大致流程与编译pyOpenSSL相同。
+
+最后在R6300v2的dd-wrt上用easy_install安装egg文件即可
+[sourcecode language="plain"]
+wget http://peak.telecommunity.com/dist/ez_setup.py
+python ez_setup.py
+easy_install pyOpenSSL-0.13-py2.7.egg
+easy_install greenlet-0.4.1-py2.7.egg
+easy_install gevent-0.13.8-py2.7.egg
+[/sourcecode]
+这样我们就安装完我们需要的组件了，这篇文章主要目的是记录一下过程，具体细节并不是非常详细，如果遇到些什么问题可以留言。
+
+最后我又稍稍处理了一下python的lib，把.py文件全部编译成.pyo了，其实意义不是非常大，只不过是想试试而已~
+<a href="/uploads/2013/08/python-in-r6300v2.png"><img src="/uploads/2013/08/python-in-r6300v2.png" alt="python-in-r6300v2" width="601" height="378" class="alignnone size-full wp-image-757" /></a>
+在用不了screen的情况下，如果想后台运行的话就使用nohup命令吧~</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>

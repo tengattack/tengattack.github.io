@@ -1,0 +1,27 @@
+<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="1779824343"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2013/07/12/让macosx目录下不产生-ds_store文件/" data-reactid="21"><h2 class="entry-title" data-reactid="22">让MacOSX目录下不产生.DS_Store文件</h2></a></header><div class="entry-content" data-reactid="23">有些人也许要问，为何不让他产生，当然，有许多理由，最重要的一条就是当发给别人之后可能会泄漏当前目录下的所有文件信息。而且本方法只是讲.DS_Store换个位置，关于目录的信息还是可以保留的。
+为了解决这个问题，一直在找相关的方法，前一段时间终于看到了，我们可以使用Asepsis这个免费开源软件:
+<a href="http://asepsis.binaryage.com/" target="_blank">http://asepsis.binaryage.com/</a>
+其原理大致是一个kext (? 不确定，没有仔细研究)，启动的时候被自动加载，在Finder打算读取或者写入一个目录的.DS_Store文件时，他会帮助把.DS_Store文件重定向到 /usr/local/.dscage/path/to/folder 目录后，<span style="color: #ccffff;"><strong>这样就可以在不丢失目录信息的情况下不在当前目录创建.DS_Store文件了</strong></span>
+如果想要了解更多，可以到其github中查看: <a href="https://github.com/binaryage/asepsis" target="_blank">https://github.com/binaryage/asepsis</a>
+
+<span style="color: #ccffff;"><strong>如果不想让他每次开机都自动检查更新</strong></span>，我们有如下方法:
+<!--more-->
+我们先备份一下 /Library/LaunchAgents/com.binaryage.asepsis.updater.plist 文件，然后用文本编辑器打开这个文件 (可能需要sudo)，然后找到如下代码:<code>
+&lt;key&gt;RunAtLoad&lt;/key&gt;
+&lt;true/&gt;
+</code>
+<strong><span style="color: #ccffcc;">删去上面那一小段代码，替换为如下代码</span>即可</strong>:<code>
+&lt;key&gt;StartCalendarInterval&lt;/key&gt;
+&lt;dict&gt;
+&lt;key&gt;Hour&lt;/key&gt;
+&lt;integer&gt;14&lt;/integer&gt;
+&lt;key&gt;Minute&lt;/key&gt;
+&lt;integer&gt;4&lt;/integer&gt;
+&lt;key&gt;Weekday&lt;/key&gt;
+&lt;integer&gt;7&lt;/integer&gt;
+&lt;/dict&gt;
+</code>
+
+<span style="color: #ccffff;">如果要恢复其自动更新，我们只需恢复之前的备份就好了。</span>
+
+<span style="color: #ffff99;"><strong>现在目录下没有了.DS_Store文件感觉甚好～</strong></span></div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>
