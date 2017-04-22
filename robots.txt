@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:  
+Sitemap: http://blog.tengattack.com/sitemap.xml
