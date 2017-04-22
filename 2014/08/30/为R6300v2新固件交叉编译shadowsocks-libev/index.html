@@ -1,0 +1,66 @@
+<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="763017520"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2014/08/30/为R6300v2新固件交叉编译shadowsocks-libev/" data-reactid="21"><h2 class="entry-title" data-reactid="22">为R6300v2新固件交叉编译shadowsocks-libev</h2></a></header><div class="entry-content" data-reactid="23"><p>&#8212; UPDATE &#8212;<br />
+需要更新的编译版本请查看这里：<br />
+<a href="http://blog.bydell.com/posts/cross_complie_shadowsocks_for_dd-wrt__r6300v2/" target="_blank">http://blog.bydell.com/posts/cross_complie_shadowsocks_for_dd-wrt__r6300v2/</a><br />
+&#8212; &#8212;&#8212; &#8212;</p>
+<p>还记得很久之前阿三的一个被嘲讽为bad hack的R6300v2的dd-wrt固件刚出的时候，本人曾经还为其交叉编译了python：<br />
+<a href="http://tengattack.com/archive/755" target="_blank">http://tengattack.com/archive/755</a></p>
+<p>当时用的工具链还是hndtools-arm-linux-2.6.36-uclibc-4.5.3，uclibc果然在这类嵌入式设备中用的很多啊。<br />
+不过自从Kong Mod的R6300v2的dd-wrt固件在 r24500 (Build 24500) 之后，他把uClibc更换为musl，让很多以前交叉编译出来的东西都用不了。<br />
+（可以参考 <a href="http://www.desipro.de/ddwrt/K3-AC-Arm/Changelog" target="_blank">http://www.desipro.de/ddwrt/K3-AC-Arm/Changelog</a> Build 24500 ）</p>
+<p>不过本人今天难得有点时间，正好折腾完了服务器上的kvm虚拟化了一台Archlinux当Web Server，和一台Windows Server来跑点其他的小玩意，也是之前那篇博文有人问到了，就来折腾一下新固件的交叉编译吧。<br />
+<span id="more-1027"></span><br />
+首先，我们肯定要知道他用的工具链是啥，他在他的博客和固件发布页没写任何信息，只是知道换成了musl，如果是自己搭的工具链那就无解了，不过我相信没人这么蛋疼。<br />
+最后我搜了半天，终于找到了，是<strong>crossx86-arm-linux-musleabi-1.1.2</strong>，虽然不能确认就是这个，但是至少用这个编译出来的可以正常运行，我们也就用这个工具链吧。<br />
+<strong>（可以在我这里找到：<a href="https://bless.moe/io/linux/toolchains/" title="toolchains" target="_blank">https://bless.moe/io/linux/toolchains/</a>）</strong></p>
+<p>为了编译shadowsocks-libev，我们在他的<a href="https://github.com/madeye/shadowsocks-libev" target="_blank">GitHub页</a>可以看到一些说明，得知我们需要首先编译OpenSSL或PolarSSL。<br />
+由于在一开始提到的<a href="http://tengattack.com/archive/755" target="_blank">文章</a>中也编译过OpenSSL，所以这里打算直接用。<br />
+不过在更换为musl的C Library之后编译会遇到一些问题，我们可以来看看。</p>
+<p>这里我使用的openssl版本是 <strong>openssl-1.0.1i</strong> 。</p>
+<p>在设定好交叉编译的环境后，进入openssl的源码目录，我们编译时会提示缺少 termio.h 文件，这个头文件是uClibc才有的，而我们现在是musl。<br />
+所以我们需要做一些修改，首先把Configure配置文件中的 <strong>-DTERMIO</strong> 改为 <strong>-DTERMIOS</strong> ：</p>
+<pre class="brush: bash; title: ; notranslate">
+sed -i 's/-DTERMIO/-DTERMIOS/g' Configure
+</pre>
+<p>然后就是配置和编译，prefix可根据自己的需求修改：</p>
+<pre class="brush: bash; title: ; notranslate">
+CC=arm-linux-gcc CXX=arm-linux-g++ AR=arm-linux-ar RANLIB=arm-linux-ranlib ./Configure no-asm shared --prefix=/usr/local/arm/ssl linux-armv4
+make &amp;&amp; make install
+</pre>
+<p>改完后编译还是有点问题，他还是会提示缺少 termio.h 文件，这时我们得修改 ./crypto/ui/ui_openssl.c 文件来强制更换定义。<br />
+大概在222行处，在
+<pre class="brush: cpp; title: ; notranslate">#ifdef TERMIOS</pre>
+<p> 这行代码前面，来强制更换定义：</p>
+<pre class="brush: cpp; title: ; notranslate">
+#define TERMIOS
+#undef  TERMIO
+#undef  SGTTY
+</pre>
+<p>不知有没有更好的方法，希望能告知，万分感谢！</p>
+<p>然后继续编译，搞定！别忘记 <bash>make install</bash> 。</p>
+<p>接着就是 shadowsocks-libev 了，这里本人使用的版本是 1.4.6 。<br />
+从git上拖下代码，进入源码目录，配置和编译（参数需根据自己的环境修改）：</p>
+<pre class="brush: bash; title: ; notranslate">
+CC=arm-linux-musleabi-gcc CXX=arm-linux-musleabi-g++ AR=arm-linux-musleabi-ar RANLIB=arm-linux-musleabi-ranlib ./configure --prefix=/usr/local/arm/shadowsocks-libev --with-openssl=/usr/local/arm/ssl --host=arm-linux
+make &amp;&amp; make install
+</pre>
+<p>如果需要编译 ss-redir 我们需要用到linux内核的头文件，在这个工具链中没有，由于之前下过dd-wrt官网的工具链：<br />
+<a href="http://www.dd-wrt.com/site/support/other-downloads?path=others/sourcecode/toolchains/" target="_blank">http://www.dd-wrt.com/site/support/other-downloads?path=others/sourcecode/toolchains/</a></p>
+<p>找了个相近的工具链（toolchain-arm_cortex-a9_gcc-4.9-linaro_musl-1.1.2_eabi），直接把需要用到的文件链接了过来：<br />
+（这里的路径需要根据自己的环境进行修改，我这里的工具链都放在 /media/s/ 下了）</p>
+<pre class="brush: bash; title: ; notranslate">
+ln -s /media/s/dd-wrt/toolchain-arm_cortex-a9_gcc-4.9-linaro_musl-1.1.2_eabi/include/linux /media/s/dd-wrt/arm-linux-musleabi/arm-linux-musleabi/include/
+ln -s /media/s/dd-wrt/toolchain-arm_cortex-a9_gcc-4.9-linaro_musl-1.1.2_eabi/include/asm /media/s/dd-wrt/arm-linux-musleabi/arm-linux-musleabi/include/
+ln -s /media/s/dd-wrt/toolchain-arm_cortex-a9_gcc-4.9-linaro_musl-1.1.2_eabi/include/asm-generic /media/s/dd-wrt/arm-linux-musleabi/arm-linux-musleabi/include/
+</pre>
+<p><strong>接着继续编译</strong>，搞定收工~</p>
+<p>最后是使用体验，从uClibc到musl的固件，能感觉速度有明显的提升（应该不是我的错觉）。<br />
+对shadowsocks-libev的感觉就是他大量的连接处理还是不行，我这里实际环境是内网到内网的代理，所以不存在丢包和网络不稳定的一些情况。<br />
+在这种条件下，如果连接一多就明显发现网页打开的速度变慢，如果能尽快加上python版的worker的特性应该会有所改善吧。<br />
+另外如果在高并发条件下有提示 ERROR: No file descriptors available 这样的错误的话，可以尝试用下面的命令来提高并发，一般默认是1024。</p>
+<pre class="brush: bash; title: ; notranslate">
+ulimit -n 51200
+</pre>
+<p><strong>下面附上我编译好的shadowsocks的二进制文件：<br />
+<a href="https://bless.moe/io/linux/R6300v2/shadowsocks-libev/" title="shadowsocks-libev for R6300v2" target="_blank">https://bless.moe/io/linux/R6300v2/shadowsocks-libev/</a></strong></p>
+<p>另外，还要感谢一下马尾菊苣，给我了很多指点，中间做了不少蠢事，真是给他添麻烦了。</p>
+</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>

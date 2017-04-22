@@ -1,0 +1,178 @@
+<!DOCTYPE html><html data-reactroot="" data-reactid="1" data-react-checksum="-222884655"><head data-reactid="2"><meta charset="utf-8" data-reactid="3"/><title data-reactid="4">hanejs</title><meta name="viewport" content="width=device-width, user-scalable=no" data-reactid="5"/><link rel="apple-touch-icon" href="apple-touch-icon.png" data-reactid="6"/><link rel="shortcut icon" href="favicon.ico" data-reactid="7"/><link rel="stylesheet" type="text/css" href="style.css" data-reactid="8"/></head><body data-reactid="9"><div class="site" data-reactid="10"><div class="site-inner" data-reactid="11"><header class="site-header" data-reactid="12"><div class="site-header-main" data-reactid="13"><div class="site-branding" data-reactid="14"><h1 class="site-title" data-reactid="15">hanejs</h1></div></div></header><div class="site-content" data-reactid="16"><div class="content-area" data-reactid="17"><main class="site-main" data-reactid="18"><article data-reactid="19"><header class="entry-header" data-reactid="20"><a href="/2015/01/29/Burger King 客户调查码深入/" data-reactid="21"><h2 class="entry-title" data-reactid="22">Burger King 客户调查码深入</h2></a></header><div class="entry-content" data-reactid="23"><p>好久没有发博客，今天发生了一件非常有趣的事情，且听我从头道来。</p>
+<p>这几天去外面吃饭，在某天吃汉堡王的时候，突然注意到他给的小票有这样的一个调查：<br />
+<a href="/uploads/2015/01/burgerking-survey.jpg"><img src="/uploads/2015/01/burgerking-survey.jpg" alt="burgerking-survey" width="1130" height="720" class="alignnone size-full wp-image-1161" /></a></p>
+<p><span id="more-1160"></span><br />
+然后是因为和朋友一起来，那就正好填一下，拿点额外的东西吃也不错，还可以少买瓶可乐。</p>
+<p>于是很开心的拿出了手机，开始填这个调查问卷。不过令我没想到的是，这里的选项机械重复，而且有超过20个页面需要填写，虽然有些页面的选项并不多，但是也比较令人不快。<br />
+机智的我和朋友一讨论，我们发现我们必须要完成一个自动化工具来自动填写这个表单，然后给出他的验证码。</p>
+<p>于是，第二天空闲的时候，我兴奋的完成了这个小工具，是可以部署在服务器上的BurgerKing的客户调查自动表单填写工具，输入调查码，等个半分钟就有结果了（这个是由于他们服务器网速太慢且页面较多，导致需要这么长时间的交互）。<br />
+代码是公开的，感兴趣的可以移步github： <a href="https://github.com/tengattack/burgerking-bot" title="tengattack/burgerking-bot" target="_blank">https://github.com/tengattack/burgerking-bot</a></p>
+<p>接下来便开始讲我们分析这个调查码与验证码之间联系的故事，如果觉得太长可以直接拖到文章最后看结论。</p>
+<p>完成了这件事情之后，我们很满足的又去Burger King吃了顿晚餐。<br />
+由于点餐我们又拿了几个这种小票，在吃的时候，我们发现这几个调查码是有一定规律的：<br />
+<code><br />
+2806011200802128<br />
+3806011200802128<br />
+5805011200802128<br />
+9807011200702138<br />
+0806011200201138<br />
+</code><br />
+可以看出，这几个调查码只有几位有差异，这也许是我们是在同一个时间段里拿到的。<br />
+不过，由于这个调查码和验证码店员都是要输入店内的订餐机中的，而且为了需要应对在没有网络的情况，我们猜想，我们是否可以通过某种方法计算出这个验证码。<br />
+我都可以想象出，当我拿到票的时候，直接掏出一支笔，把验证码写在纸上，然后告诉店员，完成了，不知他们的表情是什么样子的。</p>
+<p>回来之后，我们便开始了测试。<br />
+由于有了自动化的工具，我们一次测试10条数据，每一位从0～9进行变化，跑了16次。</p>
+<p>在跑第一位的时候，我们有得出这样的数据(s v)：<br />
+<code><br />
+0807011200602168 63000917<br />
+1807011200602168 63100917<br />
+2807011200602168 63200917<br />
+...<br />
+7807011200602168 63700917<br />
+8807011200602168 63800917<br />
+9807011200602168 63900917<br />
+</code><br />
+我们一下就注意到，第一位和第三位是完全一致的，这给了我们莫大的信心，这告诉我们这个验证码非常有可能是可以算出来的！</p>
+<p>于是乎，我们开始跑后面的位数。跑完后，我们得出以下结论（<strong>以下我们为了方便，简称调查码第x位为sx，验证码第x位为vx，如调查码第3位为s3</strong>）：</p>
+<ul>
+<li>s1对应v3</li>
+<li>s2不影响验证码</li>
+<li>s3只能是0,5，除此之外是无效的调查码，对验证码没有影响</li>
+<li>s4对应v8，且影响验证码的第1,2位</li>
+<li>s5只能是0</li>
+<li>s6<strong>不能是0</strong></li>
+<li>s7对应v7，且影响验证码的第5,6位</li>
+<li>s8只能是2</li>
+<li>s9对应v4，且影响验证码的第1,5,6位</li>
+<li>s10只能是0,1,2,3</li>
+<li>s11不影响验证码</li>
+<li>s12只能是0</li>
+<li>s13只能是1,2,3</li>
+<li>s14只能是0,1,2</li>
+<li>s15不影响验证码</li>
+<li>s16只能是6,8,9</li>
+</ul>
+<p>到这里，我们已经找完了每一位对应验证码的关系，也许有相互影响作用的，但是我们暂时不考虑这个，先看看能不能找出不同位间的对应关系。<br />
+我们发现，验证码是一共8位，其中验证码的3,4,7,8位分别直接对于调查码的1,9,7,4位。同时，还剩下验证码的1,2,5,6位与调查码的4,7,9位有关系，我们可以列出他们之间的关系（调查码 ->/~> 验证码，直接对应->、相关～>）：<br />
+<code><br />
+1 -> 3<br />
+4 -> 8<br />
+4 ~> 1,2<br />
+7 -> 7<br />
+7 ~> 5,6<br />
+9 -> 4<br />
+9 ~> 1,5,6<br />
+</code></p>
+<p>我们先看v2，因为它只与s4有关，我们简单的跑出一些的数据(s v | s4 v2)：<br />
+<code><br />
+2800011200802128 00200910 | 0 0<br />
+2801011200802128 09200911 | 1 9<br />
+2802011200802128 18200912 | 2 8<br />
+...<br />
+2807011200802128 63200917 | 7 3<br />
+2808011200802128 72200918 | 8 2<br />
+2809011200802128 81200919 | 9 1<br />
+</code></p>
+<p>这样把数据列出来，我们就直接看出来了： <code>(v2 + s4) % 10 = 0</code></p>
+<p>接下来是v1，它与s4,s9有关，我们继续沿用上面的数据，更改一下s9跑出一些新数据(s v | s4 s9 v1)：<br />
+<code><br />
+2800011200802128 00200910 | 0 0 0<br />
+2801011200802128 09200911 | 1 0 0<br />
+2802011200802128 18200912 | 2 0 1<br />
+...<br />
+2807011200802128 63200917 | 7 0 6<br />
+2808011200802128 72200918 | 8 0 7<br />
+2809011200802128 81200919 | 9 0 8<br />
+=================================<br />
+2800011210802128 90210910 | 0 1 9<br />
+2801011210802128 99210911 | 1 1 9<br />
+2802011210802128 08211012 | 2 1 0<br />
+...<br />
+2807011210802128 53211017 | 7 1 5<br />
+2808011210802128 62211018 | 8 1 6<br />
+2809011210802128 71211019 | 9 1 7<br />
+</code></p>
+<p>咦，我们好像发现了些什么，继续修改s9(s v | s4 s9 v1)：<br />
+<code><br />
+2800011220802128 80221010 | 0 2 8<br />
+2801011220802128 89221011 | 1 2 8<br />
+2802011220802128 98221012 | 2 2 9<br />
+...<br />
+2807011220802128 43221117 | 7 2 4<br />
+2808011220802128 52221118 | 8 2 5<br />
+2809011220802128 61221119 | 9 2 6<br />
+</code><br />
+诶，好像可以猜出来了，应该是这样的一种计算方式：<br />
+<code>v1 = ((s4 == 0) ? (10 - s9) : ((s4 - s9 - 1) < 0 ? (10 - (s4 - s9 - 1)) : (s4 - s9 - 1))) % 10</code><br />
+我们可以适当简化一下：<br />
+<code>v1 = ((s4 == 0 ? 1 : s4) - s9 + 9) % 10</code></p>
+<p>然后就是v5,v6，它们与s7,s9有关，跑出数据(s v | s7 s9 v5 v6)：<br />
+<code><br />
+2800010200802128 00200000 | 0 0 0 0<br />
+2800011200802128 00200910 | 1 0 0 9<br />
+2800012200802128 00201820 | 2 0 1 8<br />
+2800013200802128 00202730 | 3 0 2 7<br />
+2800014200802128 00203640 | 4 0 3 6<br />
+2800015200802128 00204550 | 5 0 4 5<br />
+2800016200802128 00205460 | 6 0 5 4<br />
+2800017200802128 00206370 | 7 0 6 3<br />
+2800018200802128 00207280 | 8 0 7 2<br />
+2800019200802128 00208190 | 9 0 8 1<br />
+</code><br />
+<code><br />
+2800010210802128 90210000 | 0 1 0 0<br />
+2800011210802128 90210910 | 1 1 0 9<br />
+2800012210802128 90211820 | 2 1 1 8<br />
+...<br />
+2800017210802128 90216370 | 7 1 6 3<br />
+2800018210802128 90217280 | 8 1 7 2<br />
+2800019210802128 90218190 | 9 1 8 1<br />
+</code><br />
+噫！s9是0和1的时候不影响v5,v6！我们再看看s9为2,3的时候<br />
+<code><br />
+2800010220802128 80220100 | 0 2 0 1<br />
+2800011220802128 80221010 | 1 2 1 0<br />
+2800012220802128 80221920 | 2 2 1 9<br />
+2800013220802128 80222830 | 3 2 2 8<br />
+2800014220802128 80223740 | 4 2 3 7<br />
+2800015220802128 80224650 | 5 2 4 6<br />
+2800016220802128 80225560 | 6 2 5 5<br />
+2800017220802128 80226470 | 7 2 6 4<br />
+2800018220802128 80227380 | 8 2 7 3<br />
+2800019220802128 80228290 | 9 2 8 2<br />
+=========================<br />
+2800010230802128 70230200 | 0 3 0 2<br />
+2800011230802128 70231110 | 1 3 1 1<br />
+2800012230802128 70232020 | 2 3 2 0<br />
+2800013230802128 70232930 | 3 3 2 9<br />
+2800014230802128 70233840 | 4 3 3 8<br />
+2800015230802128 70234750 | 5 3 4 7<br />
+2800016230802128 70235660 | 6 3 5 6<br />
+2800017230802128 70236570 | 7 3 6 5<br />
+2800018230802128 70237480 | 8 3 7 4<br />
+2800019230802128 70238390 | 9 3 8 3<br />
+</code></p>
+<p>我们可以通过以上数据猜测：<br />
+<code><br />
+v5 = (s7 < (s9 == 0 ? 1 : s9)) ? s7 : s7 - 1
+v6 = ((s9 == 0 ? 1 : s9) - s7 + 9) % 10
+</code></p>
+<p>至此，我们已经得出所有的验证码位数的公式：<br />
+<code><br />
+v1 = ((s4 == 0 ? 1 : s4) - s9 + 9) % 10<br />
+v2 = (10 - s4) % 10<br />
+v3 = s1<br />
+v4 = s9<br />
+v5 = (s7 < (s9 == 0 ? 1 : s9)) ? s7 : s7 - 1
+v6 = ((s9 == 0 ? 1 : s9) - s7 + 9) % 10
+v7 = s7
+v8 = s4
+</code></p>
+<p><del datetime="2015-01-29T08:35:05+00:00">出来了，皆大欢喜～</del><br />
+突然发现，v5,v6还会受到s4的影响，还需要一些调整。</p>
+<p>然后我们经过一系列的数据分析，我们发现v5,v6还与s4有关，于是我们得到一个新的修正公式（(x,y)表示第x和第y位合并在一起的两位数）：<br />
+<code><br />
+v(5,6) = s(7,9) - Ceil((s(7,9) - (s4 == 0 ? 1 : s4) + 1) / 10)<br />
+</code></p>
+<p>大家可以试试我弄的在线的计算器： <a href="https://burger.bless.moe/">https://burger.bless.moe/</a></p>
+</div><footer class="entry-footer" data-reactid="24"><span class="posted-on" data-reactid="25"><time data-reactid="26"></time></span></footer></article></main></div><aside class="sidebar" data-reactid="27"><section class="widget" data-reactid="28"><h2 class="widget-title" data-reactid="29">Tags</h2><ul data-reactid="30"><li data-reactid="31">未分类</li><li data-reactid="32">链接表</li><li data-reactid="33">galgame</li><li data-reactid="34">nginx</li><li data-reactid="35">php</li><li data-reactid="36">psp</li><li data-reactid="37">生活</li><li data-reactid="38">web</li><li data-reactid="39">梦</li><li data-reactid="40">nodejs</li><li data-reactid="41">c++</li><li data-reactid="42">日本</li><li data-reactid="43">Windows</li><li data-reactid="44">嵌入式</li><li data-reactid="45">友链</li><li data-reactid="46">FreeBSD</li><li data-reactid="47">SSD</li><li data-reactid="48">blog</li><li data-reactid="49">device</li><li data-reactid="50">google</li><li data-reactid="51">汉化</li><li data-reactid="52">学校</li><li data-reactid="53">develop</li><li data-reactid="54">MySQL</li><li data-reactid="55">OS</li><li data-reactid="56">MacOSX</li><li data-reactid="57">生活</li><li data-reactid="58">python</li><li data-reactid="59">nixie</li><li data-reactid="60">RaspberryPi</li><li data-reactid="61">PCB</li></ul></section></aside></div></div></div></body></html>
