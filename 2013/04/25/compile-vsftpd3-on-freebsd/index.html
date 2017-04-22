@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>FreeBSD上编译安装vsftpd3 - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2013/04/25/compile-vsftpd3-on-freebsd/">
+                  <h2 class="entry-title">FreeBSD上编译安装vsftpd3</h2>
+                </a><span class="posted-on"><time datetime="2013-04-24T20:01:24.000Z">Thursday, April 25, 2013 4:01 AM</time></span></header>
+              <div class="entry-content">我们需要patch一个文件 patch-sysdeputil.c : [code lang=&quot;cpp&quot;] --- sysdeputil.c.orig 2010-03-26 06:25:33.000000000 +0300 +++ sysdeputil.c 2011-05-17 20:51:35.350022421 +0400 @@ -57,7 +57,7 @@ #endif #define VSF_SYSDEP_HAVE_SHADOW #define
+                VSF_SYSDEP_HAVE_USERSHELL -#define VSF_SYSDEP_HAVE_LIBCAP +#undef VSF_SYSDEP_HAVE_LIBCAP #define VSF_SYSDEP_HAVE_UTMPX #define __USE_GNU @@ -1213,7 +1213,9 @@ vsf_insert_uwtmp(const struct mystr* p_u setutxent(); (void) pututxline(&amp;s_utent);
+                endutxent(); +#if !defined(__FreeBSD__) updwtmpx(WTMPX_FILE, &amp;s_utent); +#endif } void @@ -1232,7 +1234,9 @@ vsf_remove_uwtmp(void) (void) pututxline(&amp;s_utent); endutxent(); s_utent.ut_tv.tv_sec = vsf_sysutil_get_time_sec(); +#if
+                !defined(__FreeBSD__) updwtmpx(WTMPX_FILE, &amp;s_utent); +#endif } #endif /* !VSF_SYSDEP_HAVE_UTMPX */ [/code] 之后就可以顺利编译了～ </div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

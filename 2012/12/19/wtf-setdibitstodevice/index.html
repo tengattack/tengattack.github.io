@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>SetDIBitsToDevice 真虐心 - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2012/12/19/wtf-setdibitstodevice/">
+                  <h2 class="entry-title">SetDIBitsToDevice 真虐心</h2>
+                </a><span class="posted-on"><time datetime="2012-12-19T12:40:13.000Z">Wednesday, December 19, 2012 8:40 PM</time></span></header>
+              <div class="entry-content">最近因为使用了Google的skia 2D图形库: <a href="https://code.google.com/p/skia/" target="_blank">https://code.google.com/p/skia/</a> 由于skia本身是只是一个图形库, 没有直接对设备绘制的能力 (除views库), 而在不同平台上这些API都是不同的. 在参考skia的views库中，其中包含了SkView的类，为跨平台的窗口类, 这里当然有在windows上的设备绘制能力.
+                但是由于各种原因，本人不想使用SkView作为基础窗口类, 只用SkBitmap做为内存画布, 故找到了在windows对设备绘制的API: 在SkOSWindow::doPaint方法中, 可以看到是SetDIBitsToDevice函数对设备进行绘制. 但是由于在doPaint中是对SkBitmap全部数据进行绘制，而我自然是希望可以绘制部分, 于是查阅了MSDN: <a href="http://msdn.microsoft.com/zh-cn/library/windows/desktop/dd162974(v=vs.85).aspx"
+                  target="_blank">http://msdn.microsoft.com/zh-cn/library/windows/desktop/dd162974(v=vs.85).aspx</a> 但是其中的YSrc参数一直很让我很苦恼, MSDN对其的描述为: The y-coordinate, in logical units, of the lower-left corner of the image. 左下角 (lower-left corner), 这是什么坑爹的概念,
+                计算机里一般不都是左上角, 方向为向右和向下么! <del datetime="2012-12-19T12:27:53+00:00">(擦, 写到这里浏览器哭脸了! 好在WordPress有保存草稿的功能)</del> 但是暂时不管这些，很快在使用的过程中发现, 凡是指定了源高度(ySrc)绘制的图像都对不上位置, 图像源高度位置变成了 (bmpheight - ysrc - drawheight) 这个位置, 而且由于SkBitmap内图片数据储存方式和windows默认的规则(下到上)相反,
+                而是(上到下). 网上查的很多资料看起来都不怎么适用, 甚至没有讲明白到底是怎么绘制的. <strong>搜了好久后, 发现这样的一篇文章, 很详细的描述了SetDIBitsToDevice的绘制机制:</strong> <a href="http://jixiang1119.blog.163.com/blog/static/2827097320108342559871/" target="_blank">http://jixiang1119.blog.163.com/blog/static/2827097320108342559871/</a>                多亏了这篇文章, 本人明白了主要控制绘制源高度的参数其实是 <strong>lpvBits, cScanLines</strong>, 即在lpvBits上加上源高度乘以每行字节数(ysrc * rowBytes), cScanLines则设置为绘制高度, 如果cScanLines设置的扫描行数超出了源图片范围也会出问题, 本人虽然也尝试过这种方式, 但就是因为没管cScanLines参数, 导致失败. 顺便贴出skia指定区域绘图到HDC的代码吧 (大部分代码来自SkOSWindow::doPaint):
+                [code lang=&quot;cpp&quot;] void SkiaPaint(void* ctx, int x, int y, int cx, int cy, const SkBitmap&amp; bitmap, int srcx, int srcy) { //this-&gt;update(NULL); //if (kNone_BackEndType == fAttached) { HDC hdc = (HDC)ctx; BITMAPINFO bmi;
+                memset(&amp;bmi, 0, sizeof(bmi)); bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER); bmi.bmiHeader.biWidth = bitmap.width(); bmi.bmiHeader.biHeight = -bitmap.height(); // top-down image bmi.bmiHeader.biPlanes = 1; bmi.bmiHeader.biBitCount
+                = 32; bmi.bmiHeader.biCompression = BI_RGB; bmi.bmiHeader.biSizeImage = 0; // // Do the SetDIBitsToDevice. // // TODO(wjmaclean): // Fix this call to handle SkBitmaps that have rowBytes != width, // i.e. may have padding at the end of
+                lines. The SkASSERT below // may be ignored by builds, and the only obviously safe option // seems to be to copy the bitmap to a temporary (contiguous) // buffer before passing to SetDIBitsToDevice(). SkASSERT(bitmap.width() * bitmap.bytesPerPixel()
+                == bitmap.rowBytes()); bitmap.lockPixels(); int iRet = SetDIBitsToDevice(hdc, x, y, cx, cy, srcx, 0, 0, cy, (byte *)bitmap.getPixels() + bitmap.rowBytes() * srcy, &amp;bmi, DIB_RGB_COLORS); bitmap.unlockPixels(); } } [/code] 真心虐心啊!</div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

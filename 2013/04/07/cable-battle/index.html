@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>网线的战争 - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2013/04/07/cable-battle/">
+                  <h2 class="entry-title">网线的战争</h2>
+                </a><span class="posted-on"><time datetime="2013-04-06T17:54:05.000Z">Sunday, April 7, 2013 1:54 AM</time></span></header>
+              <div class="entry-content">最近一直很忙，没有什么时间记录一下这件事，趁今天有点空来大致记录一下，不要等以后忘记了才追悔莫及。 由于我们学生宿舍没有网络且23点后会断网，所以会有各种奇葩的问题。 不过我们每层楼有个活动室，里面有有线网络，我们会有人将其拉到宿舍。 以下将会以日记的形式，记录关键日期的事情。 要详细说的话都可以写小说了，我相信其中的精彩程度不比一些小说差到哪里 -第一学期刚入学 A栋宿舍（男子寮）有网络，B栋没有 -之后一段时间 由于知道的人太多了，走漏风声学校发现，A栋网断 -第一学期中
+                开始有人拉网线到宿舍，宿管来提醒，但只有一个人收起来了 -寒假 更换有线网络认证方式为Portal网页认证 -2013/03/25 信息中心派人来剪网线，但由于被学生正面撞上给赶了回去。 发现楼下如下公告（此前一直不知道）：
+                <a href="/uploads/2013/04/IMG_1721.jpg"><img class="/uploads/2013/04/IMG_1721.jpg" alt width="768" height="1024" /></a> -2013/03/26 早上，接近中午，宿舍 信息中心BOSS趁着我们人都没在的时候亲自过来剪网线，众人表示断了之后才发现。 中午，食堂 信息中心BOSS被我们叫到食堂当面对峙。 一个某Project队长当面对着他发怒，大吼：“我需要网络，非常快的网络，非常非常快的网络！”
+                <a href="/uploads/2013/04/IMG_1720.jpg"><img class="/uploads/2013/04/IMG_1720.jpg" alt width="1024" height="1365" /></a> 在这次对峙中，在我问之是什么规定的时候，这个自以为是学校土皇帝的信息中心BOSS说出了这样的一句话：
+                <h1><strong>“学校的规定，我说推翻就推翻”</strong></h1> 我当时就指着他说：“你有本事再给我说一遍！” 当时没有录音真是太可惜了，后面开始录音之后他就没敢说什么了。 后面还把责任推到教工部，说是他们教工部，是上级的通知，不过据了解教工部并没有这么通知过。 所谓的赔偿也没有下文了。 许诺尽快将那位Project队长宿舍内通网。 下午 发现学校CMCC设备，PoE网线供电，与其天线位置 将OpenWrt路由器摆到离天线最近的地方，网线拉至宿舍，接另一个路由器，共享CMCC网络
+                <a href="/uploads/2013/04/2600709120.png"><img class="/uploads/2013/04/2600709120.png" alt width="300" height="135" /></a> 下行速度能达到1M/s左右 发现用路由器连CMCC比用什么所谓的大功率天线连更稳定和快速。 晚上 某条断掉的网线拧巴拧巴被重新接好，再次连到活动室 计划从外部拉网线 -2013/03/29 晚上 从外部接网线到活动室
+                <a href="/uploads/2013/04/net-prepare2.png"><img class="/uploads/2013/04/net-prepare2.png" alt width="818" height="490" /></a> 最后发现楼下控制用线本来是为了防止网线在上面用绳子往上拉的时候被卡住设计的，但最后不但发现是想多了，而且吊下来的线还被一个老师看到了，最后倒是没看到是网线 -2013/03/30 下午 由于被某同学直接打电话找信息中心BOSS喷网速慢，信息中心BOSS再次来到宿舍，网线再次被剪，外部的网线被从活动室剪到阳台，但由于固定得很好，没掉下去。
+                晚上 使用各种方法，又把网线接回去了 开始构建我们楼层的全天候局域网
+                <ul>
+                  <li>白天7点通网-&gt;学校网络</li>
+                  <li>晚上23点学校断网后-&gt;CMCC</li>
+                </ul> -2013/04/02 部分有台式机的学生宿舍通网（需申请） -至今 (2013/04/07) 暂时算是稳定了，如果还有什么事发生的话会补上。 我们的收获就是现在得到了比以前更好更方便的全天候网络，以及楼层千兆局域网（大雾，很多设备和线材达不到千兆要求）。 另外就是打算什么时候在有空的时候换成自动切换的模式，现在还是物理手动切换，每次换了还得手动登录。 其实从这次的事件中我们还发现了另一件事就是所谓的权益部目前基本是真的干不了什么事的。 PS. 这个信息中心BOSS每次见到的时候身上总是散发着令人难以忍受的气味。</div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

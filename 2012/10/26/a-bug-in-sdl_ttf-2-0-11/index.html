@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>SDL_ttf-2.0.11 一处bug(?) - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2012/10/26/a-bug-in-sdl_ttf-2-0-11/">
+                  <h2 class="entry-title">SDL_ttf-2.0.11 一处bug(?)</h2>
+                </a><span class="posted-on"><time datetime="2012-10-26T15:39:29.000Z">Friday, October 26, 2012 11:39 PM</time></span></header>
+              <div class="entry-content">最近在研究ONScripter，自然是下载下源代码来研究。 由于ONS依赖SDL的库，包括SDL、SDL_image、SDL_ttf等许多开源库，我自然是全部下载下来研究了。 全部编译好link之后发现程序可以ONS执行但是却显示不了对话的文本， 调试了一早上和中午发现，显示不了文本的问题不是出现在ONS的代码里，而是在SDL_ttf库里。 在SDL_ttf.c的TTF_RenderGlyph_Shaded函数中，有一段这样的代码: [code lang=&quot;cpp&quot;]
+                /* Copy the character from the pixmap */ src = glyph-&gt;pixmap.buffer; dst = (Uint8*) textbuf-&gt;pixels; for ( row = 0; row &lt; glyph-&gt;bitmap.rows; ++row ) { memcpy( dst, src, glyph-&gt;pixmap.width ); src += glyph-&gt;pixmap.pitch;
+                dst += textbuf-&gt;pitch; } [/code] 而这明显是有问题的，不管是从注释还是for里面的代码来看，glyph-&gt;bitmap.rows 应该为 glyph-&gt;pixmap.rows 而如果是 glyph-&gt;bitmap.rows 的话，在这里 glyph-&gt;bitmap.rows 为0，也就是说什么character数据也拷贝不到，也就自然无法显示文字。 我们把 glyph-&gt;bitmap.rows 修改为
+                glyph-&gt;pixmap.rows: [code lang=&quot;cpp&quot;] /* Copy the character from the pixmap */ src = glyph-&gt;pixmap.buffer; dst = (Uint8*) textbuf-&gt;pixels; //glyph-&gt;bitmap.rows -&gt; glyph-&gt;pixmap.rows by TengAttack for ( row =
+                0; row &lt; glyph-&gt;pixmap.rows; ++row ) { memcpy( dst, src, glyph-&gt;pixmap.width ); src += glyph-&gt;pixmap.pitch; dst += textbuf-&gt;pitch; } [/code] 重新编译SDL_ttf库，再重新链接ONS即可。
+                <a href="/uploads/2012/10/onscripter-sdl_ttf.png"><img src="/uploads/2012/10/onscripter-sdl_ttf.png" alt title="onscripter-sdl_ttf" width="1127" height="539" class="alignnone size-full wp-image-255" /></a>
+              </div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

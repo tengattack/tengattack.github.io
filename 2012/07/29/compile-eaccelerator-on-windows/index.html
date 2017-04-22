@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>eAccelerator在Windows上编译有感 - tengattack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="generator" content="hanejs" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+  <div class="site">
+    <div class="site-inner">
+      <header class="site-header">
+        <div class="site-header-main">
+          <div class="site-branding">
+            <h1 class="site-title">tengattack</h1>
+          </div>
+        </div>
+      </header>
+      <div class="site-content">
+        <div class="content-area">
+          <main class="site-main">
+            <article>
+              <header class="entry-header">
+                <a href="/2012/07/29/compile-eaccelerator-on-windows/">
+                  <h2 class="entry-title">eAccelerator在Windows上编译有感</h2>
+                </a><span class="posted-on"><time datetime="2012-07-28T19:09:20.000Z">Sunday, July 29, 2012 3:09 AM</time></span></header>
+              <div class="entry-content">千言万语汇成一个词“坑爹”。 刚开始因为在FreeBSD上编译了并配置在php上却发现出现500错误，于是打算在本地配置起来测试一下。 下完代码，把eAccelerator代码解压到 php-5.4.5-src/ext/eaccelerator 或者直接在ext目录下 git clone 进入php-5.4.5-src源代码文件夹，看到buildconf.bat果断运行之，发现提示错误：没有为*.js文件提供的脚本引擎 好吧，我知道我用notepad++关联了.js文件，但这windows的脚本引擎太不给力了
+                去掉关联，运行，出来个configure.bat，运行之，好吧提示需要vs工具 开vs9的命令行工具，运行之，ok了 因为我打算编译的是线程安全版，就去官网下了个编译好的，拷贝其中dev文件夹下的php5ts.lib到php源代码目录 然后进入eaccelerator源代码文件夹，打开win32下的eAccelerator.sln (vs2008) 然后，选Release版，编译之。 好吧，一堆错误。 其中还有啥i啊l啊没有定义，这些都是小问题，好像是在vs中.c文件的变量定义要放在块的最前面，找到对应位置，提前就好了。
+                这个解决了，还有错误： [sourcecode language=&quot;plain&quot;] 1&gt;..\ea_store.c(302) : error C2198: “calc_zval_ptr”: 用于调用的参数太少 1&gt;..\ea_store.c(311) : error C2198: “calc_zval_ptr”: 用于调用的参数太少 [/sourcecode] 好吧，感觉这个有点棘手。点过去看看，嗯，因为是线程安全模式，他用宏多定义了个参数。
+                也就是说我不得不多加个参数，凭我多年C++开发经验，告诉我这里应该弄个很神奇的宏上去，但是一时找不到，就填了2个NULL上去。 通过编译，测试之，一开网页，php驻守进程直接挂了，好吧，那里肯定不是填NULL 观察上下代码，发现了很奇葩的一个宏 TSRMLS_CC 都被用在其他添加了参数的函数的后面，补上去： [code lang=&quot;cpp&quot;] if (from-&gt;default_properties_count) { int i = 0;
+                ADDSIZE(size, sizeof(zval *) * from-&gt;default_properties_count); for (i = 0; i &lt; from-&gt;default_properties_count; i++) { if (from-&gt;default_properties_table[i]) { size += calc_zval_ptr(&amp;from-&gt;default_properties_table[i]
+                TSRMLS_CC); } } } if (from-&gt;default_static_members_count) { int i = 0; ADDSIZE(size, sizeof(zval *) * from-&gt;default_static_members_count); for (i = 0; i &lt; from-&gt;default_static_members_count; i++) { if (from-&gt;default_static_members_table[i])
+                { size += calc_zval_ptr(&amp;from-&gt;default_static_members_table[i] TSRMLS_CC); } } } [/code] 这下好了，果断通过了编译，运行了起来。 不过可惜，运行一些大型php程序总有点问题，像discuz X2.5出现找不到C的父类core的问题，这样根本运行不了discuz，虽然dz也很坑 然后试了试phpMyAdmin，好吧，能运行，但是还是有点错误，至少能在网页里开着来玩了；
+                最后我试了试wordpress，好家伙，php的驻守进程崩溃了，还跳出个Windows程序意外结束的消息…… 果断，放弃之。 </div>
+            </article>
+          </main>
+        </div>
+        <aside class="sidebar">
+          <section class="widget">
+            <h2 class="widget-title">Tags</h2>
+            <ul>
+              <li>未分类</li>
+              <li>链接表</li>
+              <li>galgame</li>
+              <li>nginx</li>
+              <li>php</li>
+              <li>psp</li>
+              <li>生活</li>
+              <li>web</li>
+              <li>梦</li>
+              <li>nodejs</li>
+              <li>c++</li>
+              <li>日本</li>
+              <li>Windows</li>
+              <li>嵌入式</li>
+              <li>友链</li>
+              <li>FreeBSD</li>
+              <li>SSD</li>
+              <li>blog</li>
+              <li>device</li>
+              <li>google</li>
+              <li>汉化</li>
+              <li>学校</li>
+              <li>develop</li>
+              <li>MySQL</li>
+              <li>OS</li>
+              <li>MacOSX</li>
+              <li>生活</li>
+              <li>python</li>
+              <li>nixie</li>
+              <li>RaspberryPi</li>
+              <li>PCB</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
