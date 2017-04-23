@@ -33,6 +33,21 @@
               <div class="entry-content"><strong>理论上速度能有所提升。</strong> 今天偶然看到一份代码，发现里面用 &lt;&lt; 1 表示2倍 (对整数型的操作)，顿时发现这个的2个好处: 1. 效率上升; 2. 够装B. 总是感觉位运算比一般运算快出不少。(除非你的编译器有相当强度的优化，能自动把 * 2 运算转换为 &lt;&lt; 1 来运算) 另外，如果只要整除的话，用 &gt;&gt; 1 代替 / 2 也不错w </div>
             </article>
           </main>
+          <div id="comments">
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              var disqus_config = function () {
+                this.page.url = "http://blog.tengattack.com/2012/11/26/using-bitwise-operation-in-c-cpp/";
+                this.page.identifier = "using-bitwise-operation-in-c-cpp";
+              };
+              (function () {
+                var d = document,
+                  s = d.createElement('script');
+                s.src = 'https://tengattack.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+              })();
+            </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
         </div>
         <aside class="sidebar">
           <section class="widget">

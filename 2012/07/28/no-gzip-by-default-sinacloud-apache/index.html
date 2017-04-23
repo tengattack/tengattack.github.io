@@ -33,6 +33,21 @@
               <div class="entry-content">坑爹，今天去商店的管理中心看了看，只用了55小时居然烧了18%的流量，我擦，这是什么概念。 加上页面打开速度有点慢，我突然就想到是不是没开gzip <span style="color: #ffff00;"><strong>右键审查元素，我擦，吓傻了，翻来覆去找不到Content-Encoding，这坑爹的！</strong></span> 没办法，只能自己建个.htaccess来解决了，云商店的wp的文件管理还得自己传插件上来弄，唉，真坑爹。</div>
             </article>
           </main>
+          <div id="comments">
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              var disqus_config = function () {
+                this.page.url = "http://blog.tengattack.com/2012/07/28/no-gzip-by-default-sinacloud-apache/";
+                this.page.identifier = "no-gzip-by-default-sinacloud-apache";
+              };
+              (function () {
+                var d = document,
+                  s = d.createElement('script');
+                s.src = 'https://tengattack.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+              })();
+            </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
         </div>
         <aside class="sidebar">
           <section class="widget">
