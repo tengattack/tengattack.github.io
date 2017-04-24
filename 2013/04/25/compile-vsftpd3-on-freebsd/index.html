@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2013/04/25/compile-vsftpd3-on-freebsd/">
-                  <h2 class="entry-title">FreeBSD上编译安装vsftpd3</h2>
+                <a class="entry-title" href="/2013/04/25/compile-vsftpd3-on-freebsd/">
+                  <h2>FreeBSD上编译安装vsftpd3</h2>
                 </a><span class="posted-on"><time datetime="2013-04-24T20:01:24.000Z">Thursday, April 25, 2013 4:01 AM</time></span></header>
               <div class="entry-content">我们需要patch一个文件 patch-sysdeputil.c : [code lang=&quot;cpp&quot;] --- sysdeputil.c.orig 2010-03-26 06:25:33.000000000 +0300 +++ sysdeputil.c 2011-05-17 20:51:35.350022421 +0400 @@ -57,7 +57,7 @@ #endif #define VSF_SYSDEP_HAVE_SHADOW #define
                 VSF_SYSDEP_HAVE_USERSHELL -#define VSF_SYSDEP_HAVE_LIBCAP +#undef VSF_SYSDEP_HAVE_LIBCAP #define VSF_SYSDEP_HAVE_UTMPX #define __USE_GNU @@ -1213,7 +1213,9 @@ vsf_insert_uwtmp(const struct mystr* p_u setutxent(); (void) pututxline(&amp;s_utent);
@@ -115,6 +116,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

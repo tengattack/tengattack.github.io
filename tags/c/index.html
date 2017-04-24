@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -33,76 +34,77 @@
       </header>
       <div class="site-content">
         <div class="content-area">
-          <main class="site-main">
+          <main class="site-main site-article-list">
             <article>
               <header class="entry-header">
-                <a href="/2014/09/03/modify-dnsapi.dll-to-enforce-tcp-dns/">
-                  <h2 class="entry-title">修改Windows下dnsapi.dll强制使用TCP进行DNS查询</h2>
+                <a class="entry-title" href="/2014/09/03/modify-dnsapi.dll-to-enforce-tcp-dns/">
+                  <h2>修改Windows下dnsapi.dll强制使用TCP进行DNS查询</h2>
                 </a><span class="posted-on"><time datetime="2014-09-03T11:31:17Z">Wednesday, September 3, 2014 7:31 PM</time></span></header>
               <div class="entry-content">
                 <p>首先我承认，我一时脑洞，好好的一个人，浪费几小时去折腾这破玩意。</p>
                 <p>先看看效果：<br /><br />
                   <a href="/uploads/2014/09/tcp-dns.png"><img src="/uploads/2014/09/tcp-dns.png" alt="tcp dns" width="692" height="79" class="alignnone size-full wp-image-1068" /></a><br /><br /> <span id="more-1067"></span><br /><br /> 由于之前在路由上设置了内网的TCP转发，可惜DNS查询在Windows下默认使用的是UDP方式，而且居然没有修改的方式！<br
                   /><br /> 在网上搜索之后，发现可以通过修改 dnsapi.dll 的方式来实现强制使用TCP进行DNS查询，但是很可惜的是作者没说具体的方法。<del datetime="2014-09-03T19:49:53+00:00">妈蛋我一下子就兴奋了，这是赤裸裸地挑衅啊！</del></p>
-              </div><a href="/2014/09/03/modify-dnsapi.dll-to-enforce-tcp-dns/">...Read More</a></article>
+              </div><a class="read-more" href="/2014/09/03/modify-dnsapi.dll-to-enforce-tcp-dns/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2014/08/30/cross-compile-shadowsocks-libev-for-r6300v2/">
-                  <h2 class="entry-title">为R6300v2新固件交叉编译shadowsocks-libev</h2>
+                <a class="entry-title" href="/2014/08/30/cross-compile-shadowsocks-libev-for-r6300v2/">
+                  <h2>为R6300v2新固件交叉编译shadowsocks-libev</h2>
                 </a><span class="posted-on"><time datetime="2014-08-30T08:33:21Z">Saturday, August 30, 2014 4:33 PM</time></span></header>
               <div class="entry-content">
                 <p>还记得很久之前阿三的一个被嘲讽为bad hack的R6300v2的dd-wrt固件刚出的时候，本人曾经还为其交叉编译了python：<br /><br /> <a href="http://tengattack.com/archive/755" target="_blank">http://tengattack.com/archive/755</a></p>
-              </div><a href="/2014/08/30/cross-compile-shadowsocks-libev-for-r6300v2/">...Read More</a></article>
+              </div><a class="read-more" href="/2014/08/30/cross-compile-shadowsocks-libev-for-r6300v2/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2013/04/25/compile-vsftpd3-on-freebsd/">
-                  <h2 class="entry-title">FreeBSD上编译安装vsftpd3</h2>
+                <a class="entry-title" href="/2013/04/25/compile-vsftpd3-on-freebsd/">
+                  <h2>FreeBSD上编译安装vsftpd3</h2>
                 </a><span class="posted-on"><time datetime="2013-04-24T20:01:24.000Z">Thursday, April 25, 2013 4:01 AM</time></span></header>
-              <div class="entry-content">我们需要patch一个文件 patch-sysdeputil.c : [code lang=&quot;cpp&quot;] --- sysdeputil.c.orig 2010-03-26 06:25:33.000000000 +0300 </div><a href="/2013/04/25/compile-vsftpd3-on-freebsd/">...Read More</a></article>
+              <div class="entry-content">我们需要patch一个文件 patch-sysdeputil.c : [code lang=&quot;cpp&quot;] --- sysdeputil.c.orig 2010-03-26 06:25:33.000000000 +0300 </div><a class="read-more" href="/2013/04/25/compile-vsftpd3-on-freebsd/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2013/03/18/shotit/">
-                  <h2 class="entry-title">Shotit!</h2>
+                <a class="entry-title" href="/2013/03/18/shotit/">
+                  <h2>Shotit!</h2>
                 </a><span class="posted-on"><time datetime="2013-03-18T07:38:41.000Z">Monday, March 18, 2013 3:38 PM</time></span></header>
-              <div class="entry-content"><strong>Shotit!</strong> 用于手持Windows设备对某个窗口程序进行截图的工具，非常适用于在Windows平板上玩galgame的时候进行截图。 PS: <strong>本人博客中的galgame截图基本上都是使用这个工具进行截图。</strong></div><a href="/2013/03/18/shotit/">...Read More</a></article>
+              <div class="entry-content"><strong>Shotit!</strong> 用于手持Windows设备对某个窗口程序进行截图的工具，非常适用于在Windows平板上玩galgame的时候进行截图。 PS: <strong>本人博客中的galgame截图基本上都是使用这个工具进行截图。</strong></div><a class="read-more" href="/2013/03/18/shotit/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2013/01/31/giflib-using-calloc/">
-                  <h2 class="entry-title">giflib居然使用calloc！</h2>
+                <a class="entry-title" href="/2013/01/31/giflib-using-calloc/">
+                  <h2>giflib居然使用calloc！</h2>
                 </a><span class="posted-on"><time datetime="2013-01-30T18:53:07.000Z">Thursday, January 31, 2013 2:53 AM</time></span></header>
               <div class="entry-content">今天想为gif图片提供支持，找到了现成的gif库giflib: <a href="http://sourceforge.net/projects/giflib/">http://sourceforge.net/projects/giflib/</a> 由于是在Windows下开发，使用了VS2012，由于VS不支持C99标准(没有 stdbool.h 文件)，giflib的c文件中使用bool会提示未知类型，不过这些都是小问题，很容易就可以通过修改部分代码改掉，从而成功编译，这里就不细谈了。
-                </div><a href="/2013/01/31/giflib-using-calloc/">...Read More</a></article>
+                </div><a class="read-more" href="/2013/01/31/giflib-using-calloc/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2012/12/31/a-google-plus-bot/">
-                  <h2 class="entry-title">一个Google+机器人</h2>
+                <a class="entry-title" href="/2012/12/31/a-google-plus-bot/">
+                  <h2>一个Google+机器人</h2>
                 </a><span class="posted-on"><time datetime="2012-12-30T16:54:47.000Z">Monday, December 31, 2012 12:54 AM</time></span></header>
-              <div class="entry-content">可在我的项目页面中查看详细内容: <a href="http://tengattack.com/projects/google-plus-bot">http://tengattack.com/projects/google-plus-bot</a> 简而言之就是可以根据自身的需求做出相应的设置, 比如有人发了个晚安po, 我们可以直接就回复和+1. </div><a href="/2012/12/31/a-google-plus-bot/">...Read More</a></article>
+              <div class="entry-content">可在我的项目页面中查看详细内容: <a href="http://tengattack.com/projects/google-plus-bot">http://tengattack.com/projects/google-plus-bot</a> 简而言之就是可以根据自身的需求做出相应的设置, 比如有人发了个晚安po, 我们可以直接就回复和+1. </div><a class="read-more" href="/2012/12/31/a-google-plus-bot/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2012/12/19/wtf-setdibitstodevice/">
-                  <h2 class="entry-title">SetDIBitsToDevice 真虐心</h2>
+                <a class="entry-title" href="/2012/12/19/wtf-setdibitstodevice/">
+                  <h2>SetDIBitsToDevice 真虐心</h2>
                 </a><span class="posted-on"><time datetime="2012-12-19T12:40:13.000Z">Wednesday, December 19, 2012 8:40 PM</time></span></header>
-              <div class="entry-content">最近因为使用了Google的skia 2D图形库: <a href="https://code.google.com/p/skia/" target="_blank">https://code.google.com/p/skia/</a> 由于skia本身是只是一个图形库, 没有直接对设备绘制的能力 (除views库), 而在不同平台上这些API都是不同的. </div><a href="/2012/12/19/wtf-setdibitstodevice/">...Read More</a></article>
+              <div class="entry-content">最近因为使用了Google的skia 2D图形库: <a href="https://code.google.com/p/skia/" target="_blank">https://code.google.com/p/skia/</a> 由于skia本身是只是一个图形库, 没有直接对设备绘制的能力 (除views库), 而在不同平台上这些API都是不同的. </div><a class="read-more" href="/2012/12/19/wtf-setdibitstodevice/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2012/11/26/using-bitwise-operation-in-c-cpp/">
-                  <h2 class="entry-title">在C/C++中用 &lt;&lt; 1 代替 * 2</h2>
+                <a class="entry-title" href="/2012/11/26/using-bitwise-operation-in-c-cpp/">
+                  <h2>在C/C++中用 &lt;&lt; 1 代替 * 2</h2>
                 </a><span class="posted-on"><time datetime="2012-11-26T15:23:59.000Z">Monday, November 26, 2012 11:23 PM</time></span></header>
-              <div class="entry-content"><strong>理论上速度能有所提升。</strong> 今天偶然看到一份代码，发现里面用 &lt;&lt; 1 表示2倍 (对整数型的操作)，顿时发现这个的2个好处: 1. 效率上升; </div><a href="/2012/11/26/using-bitwise-operation-in-c-cpp/">...Read More</a></article>
+              <div class="entry-content"><strong>理论上速度能有所提升。</strong> 今天偶然看到一份代码，发现里面用 &lt;&lt; 1 表示2倍 (对整数型的操作)，顿时发现这个的2个好处: 1. 效率上升; </div><a class="read-more" href="/2012/11/26/using-bitwise-operation-in-c-cpp/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2012/10/26/a-bug-in-sdl_ttf-2-0-11/">
-                  <h2 class="entry-title">SDL_ttf-2.0.11 一处bug(?)</h2>
+                <a class="entry-title" href="/2012/10/26/a-bug-in-sdl_ttf-2-0-11/">
+                  <h2>SDL_ttf-2.0.11 一处bug(?)</h2>
                 </a><span class="posted-on"><time datetime="2012-10-26T15:39:29.000Z">Friday, October 26, 2012 11:39 PM</time></span></header>
-              <div class="entry-content">最近在研究ONScripter，自然是下载下源代码来研究。 由于ONS依赖SDL的库，包括SDL、SDL_image、SDL_ttf等许多开源库，我自然是全部下载下来研究了。 </div><a href="/2012/10/26/a-bug-in-sdl_ttf-2-0-11/">...Read More</a></article>
+              <div class="entry-content">最近在研究ONScripter，自然是下载下源代码来研究。 由于ONS依赖SDL的库，包括SDL、SDL_image、SDL_ttf等许多开源库，我自然是全部下载下来研究了。 </div><a class="read-more" href="/2012/10/26/a-bug-in-sdl_ttf-2-0-11/">...Read More</a></article>
             <article>
               <header class="entry-header">
-                <a href="/2012/07/29/compile-eaccelerator-on-windows/">
-                  <h2 class="entry-title">eAccelerator在Windows上编译有感</h2>
+                <a class="entry-title" href="/2012/07/29/compile-eaccelerator-on-windows/">
+                  <h2>eAccelerator在Windows上编译有感</h2>
                 </a><span class="posted-on"><time datetime="2012-07-28T19:09:20.000Z">Sunday, July 29, 2012 3:09 AM</time></span></header>
-              <div class="entry-content">千言万语汇成一个词“坑爹”。 刚开始因为在FreeBSD上编译了并配置在php上却发现出现500错误，于是打算在本地配置起来测试一下。 下完代码，把eAccelerator代码解压到 php-5.4.5-src/ext/eaccelerator 或者直接在ext目录下 git clone </div><a href="/2012/07/29/compile-eaccelerator-on-windows/">...Read More</a></article>
-            <ul class="pagination"></ul>
+              <div class="entry-content">千言万语汇成一个词“坑爹”。 刚开始因为在FreeBSD上编译了并配置在php上却发现出现500错误，于是打算在本地配置起来测试一下。 下完代码，把eAccelerator代码解压到 php-5.4.5-src/ext/eaccelerator 或者直接在ext目录下 git clone </div><a class="read-more" href="/2012/07/29/compile-eaccelerator-on-windows/">...Read More</a></article>
+            <ul
+              class="pagination"></ul>
           </main>
         </div>
         <aside class="sidebar">
@@ -159,6 +161,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2012/07/29/compile-eaccelerator-on-windows/">
-                  <h2 class="entry-title">eAccelerator在Windows上编译有感</h2>
+                <a class="entry-title" href="/2012/07/29/compile-eaccelerator-on-windows/">
+                  <h2>eAccelerator在Windows上编译有感</h2>
                 </a><span class="posted-on"><time datetime="2012-07-28T19:09:20.000Z">Sunday, July 29, 2012 3:09 AM</time></span></header>
               <div class="entry-content">千言万语汇成一个词“坑爹”。 刚开始因为在FreeBSD上编译了并配置在php上却发现出现500错误，于是打算在本地配置起来测试一下。 下完代码，把eAccelerator代码解压到 php-5.4.5-src/ext/eaccelerator 或者直接在ext目录下 git clone 进入php-5.4.5-src源代码文件夹，看到buildconf.bat果断运行之，发现提示错误：没有为*.js文件提供的脚本引擎 好吧，我知道我用notepad++关联了.js文件，但这windows的脚本引擎太不给力了
                 去掉关联，运行，出来个configure.bat，运行之，好吧提示需要vs工具 开vs9的命令行工具，运行之，ok了 因为我打算编译的是线程安全版，就去官网下了个编译好的，拷贝其中dev文件夹下的php5ts.lib到php源代码目录 然后进入eaccelerator源代码文件夹，打开win32下的eAccelerator.sln (vs2008) 然后，选Release版，编译之。 好吧，一堆错误。 其中还有啥i啊l啊没有定义，这些都是小问题，好像是在vs中.c文件的变量定义要放在块的最前面，找到对应位置，提前就好了。
@@ -119,6 +120,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

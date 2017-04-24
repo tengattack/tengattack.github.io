@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2012/07/19/mediawiki-nginx-staticify/">
-                  <h2 class="entry-title">mediawiki nginx 静态化</h2>
+                <a class="entry-title" href="/2012/07/19/mediawiki-nginx-staticify/">
+                  <h2>mediawiki nginx 静态化</h2>
                 </a><span class="posted-on"><time datetime="2012-07-19T12:24:09.000Z">Thursday, July 19, 2012 8:24 PM</time></span></header>
               <div class="entry-content">其实mediawiki用来作为wiki站点还是很不错的，只是稍微感觉这东西体积有点大，速度有点慢- - 说说静态化规则，我们其实只需要2步（实际添加的代码可能需要根据实际情况修改）。 1.在mediawiki的设置文件LocalSettings.php中最后添加： [sourcecode language=&quot;plain&quot;] $wgArticlePath = &quot;$wgScriptPath/wiki/$1&quot;; [/sourcecode]
                 2.在nginx的配置文件中对应的位置添加： [sourcecode language=&quot;plain&quot;] rewrite ^/wiki/(.+)$ /index.php?title=$1 last; [/sourcecode] 以后就可以很简单的访问我们的wiki了，这URL感觉棒极了！</div>
@@ -113,6 +114,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2013/01/31/giflib-using-calloc/">
-                  <h2 class="entry-title">giflib居然使用calloc！</h2>
+                <a class="entry-title" href="/2013/01/31/giflib-using-calloc/">
+                  <h2>giflib居然使用calloc！</h2>
                 </a><span class="posted-on"><time datetime="2013-01-30T18:53:07.000Z">Thursday, January 31, 2013 2:53 AM</time></span></header>
               <div class="entry-content">今天想为gif图片提供支持，找到了现成的gif库giflib: <a href="http://sourceforge.net/projects/giflib/">http://sourceforge.net/projects/giflib/</a> 由于是在Windows下开发，使用了VS2012，由于VS不支持C99标准(没有 stdbool.h 文件)，giflib的c文件中使用bool会提示未知类型，不过这些都是小问题，很容易就可以通过修改部分代码改掉，从而成功编译，这里就不细谈了。
                 由于是VS，一般我们都会在Debug中调试程序，不过很不幸，在读取一张gif图片的时候居然发生了内存错误:
@@ -118,6 +119,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

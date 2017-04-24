@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2012/07/26/setup-nodejs-on-freebsd/">
-                  <h2 class="entry-title">nodejs+nginx在FreeBSD上的配置</h2>
+                <a class="entry-title" href="/2012/07/26/setup-nodejs-on-freebsd/">
+                  <h2>nodejs+nginx在FreeBSD上的配置</h2>
                 </a><span class="posted-on"><time datetime="2012-07-26T11:20:28.000Z">Thursday, July 26, 2012 7:20 PM</time></span></header>
               <div class="entry-content">看了些nodejs的文档，她给我的感觉就像是几年前的php，不得不说，现在的php给我的感觉就像是个臃肿的大汉，虽然php-5.4好了点，但php这东西还是太坑。 于是乎，我便打算自己装个nodejs在服务器上玩玩。 先去nodejs官网 <a href="http://nodejs.org/#download">http://nodejs.org/#download</a> 下源代码到服务器上，我现在的最新版本是node-v0.8.4.tar.gz <a href="http://nodejs.org/dist/v0.8.4/node-v0.8.4.tar.gz">http://nodejs.org/dist/v0.8.4/node-v0.8.4.tar.gz</a>                解压并安装之：（居然要使用gmake） tar zxvf node-v0.8.4.tar.gz ./configure --prefix=/usr/local/node --shared-zlib --shared-openssl gmake install
                 <a href="/uploads/2012/07/nodejs编译.jpg"><img class="/uploads/2012/07/nodejs编译.jpg" alt width="675" height="319" /></a> 然后发现出现这样的错误： gmake[1]: *** [/usr/local/src/node-v0.8.4/out/Release/obj.target/v8_base/deps/v8/src/platform-freebsd.o] Error 1 gmake[1]: Leaving directory `/usr/local/src/node-v0.8.4/out'
@@ -119,6 +120,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

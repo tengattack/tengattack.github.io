@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2013/07/12/remove-macosx-ds_store-permanently/">
-                  <h2 class="entry-title">让MacOSX目录下不产生.DS_Store文件</h2>
+                <a class="entry-title" href="/2013/07/12/remove-macosx-ds_store-permanently/">
+                  <h2>让MacOSX目录下不产生.DS_Store文件</h2>
                 </a><span class="posted-on"><time datetime="2013-07-11T22:53:38.000Z">Friday, July 12, 2013 6:53 AM</time></span></header>
               <div class="entry-content">有些人也许要问，为何不让他产生，当然，有许多理由，最重要的一条就是当发给别人之后可能会泄漏当前目录下的所有文件信息。而且本方法只是讲.DS_Store换个位置，关于目录的信息还是可以保留的。 为了解决这个问题，一直在找相关的方法，前一段时间终于看到了，我们可以使用Asepsis这个免费开源软件: <a href="http://asepsis.binaryage.com/" target="_blank">http://asepsis.binaryage.com/</a>                其原理大致是一个kext (? 不确定，没有仔细研究)，启动的时候被自动加载，在Finder打算读取或者写入一个目录的.DS_Store文件时，他会帮助把.DS_Store文件重定向到 /usr/local/.dscage/path/to/folder 目录后，<span style="color: #ccffff;"><strong>这样就可以在不丢失目录信息的情况下不在当前目录创建.DS_Store文件了</strong></span> 如果想要了解更多，可以到其github中查看:
                 <a href="https://github.com/binaryage/asepsis" target="_blank">https://github.com/binaryage/asepsis</a> <span style="color: #ccffff;"><strong>如果不想让他每次开机都自动检查更新</strong></span>，我们有如下方法: 我们先备份一下 /Library/LaunchAgents/com.binaryage.asepsis.updater.plist
@@ -127,6 +128,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

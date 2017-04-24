@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2013/04/25/compile-lsof-on-freebsd-9/">
-                  <h2 class="entry-title">FreeBSD 9.0 编译安装lsof</h2>
+                <a class="entry-title" href="/2013/04/25/compile-lsof-on-freebsd-9/">
+                  <h2>FreeBSD 9.0 编译安装lsof</h2>
                 </a><span class="posted-on"><time datetime="2013-04-24T18:08:45.000Z">Thursday, April 25, 2013 2:08 AM</time></span></header>
               <div class="entry-content">不知为何官方FTP上找不到9.0-RELEASE的目录，Ports更新不了，sysinstall也装不了FreeBSD 9的源码，于是在安装lsof时出现如下错误: [code] Creating ./lockf_owner.h from /usr/src/sys/kern/kern_lockf.c FATAL ERROR: can't read /usr/src/sys/kern/kern_lockf.c FATAL ERROR: ./lockf_owner.h creation
                 failed (see 00FAQ)&quot; [/code] 我们可以使用如下方式来获取sys目录下的代码 (前提自然是已经装了svn): [code] svn checkout http://svn0.us-west.FreeBSD.org/base/stable/9/sys /usr/src/sys [/code] 然后就直接make就好了~ [code] cd /usr/ports/sysutils/lsof make install clean [/code]
@@ -114,6 +115,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

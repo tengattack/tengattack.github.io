@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2013/05/11/when-myisamchk-safe-recover-failed/">
-                  <h2 class="entry-title">当使用myisamchk --safe-recover也无法修复数据库表时</h2>
+                <a class="entry-title" href="/2013/05/11/when-myisamchk-safe-recover-failed/">
+                  <h2>当使用myisamchk --safe-recover也无法修复数据库表时</h2>
                 </a><span class="posted-on"><time datetime="2013-05-10T19:47:00.000Z">Saturday, May 11, 2013 3:47 AM</time></span></header>
               <div class="entry-content">最近就遇到了这样的一个情况。 最终的解决方案就是导出一份后，把原来的数据表删除，然后再重新导入，解决问题。 不知道还有没有更方便的解决方法？ </div>
             </article>
@@ -112,6 +113,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

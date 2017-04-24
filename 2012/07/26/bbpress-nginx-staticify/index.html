@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2012/07/26/bbpress-nginx-staticify/">
-                  <h2 class="entry-title">bbPress nginx 静态化</h2>
+                <a class="entry-title" href="/2012/07/26/bbpress-nginx-staticify/">
+                  <h2>bbPress nginx 静态化</h2>
                 </a><span class="posted-on"><time datetime="2012-07-26T09:15:20.000Z">Thursday, July 26, 2012 5:15 PM</time></span></header>
               <div class="entry-content"> 最近开始接触到bbPress这个简洁清爽的论坛程序，比起discuz它可是舒服的很，没有一些多余的无用的垃圾功能，插件也很丰富（相对）。不过，他也一样继承了wordpress的蛋疼的模板的方法。 我们现在来看看如何将它静态化： <strong>这里使用的bbPress是1.1版本，其他的版本可以类推。</strong> 我们了解到，bbPress在Apache中静态化设置是这样的： [sourcecode language=&quot;plain&quot;] RewriteRule
                 ^page/([0-9]+)/?$ /index.php?page=$1 [L,QSA] RewriteRule ^forum/([^/]+)/page/([0-9]+)/?$ /forum.php?id=$1&amp;page=$2 [L,QSA] RewriteRule ^forum/([^/]+)/?$ /forum.php?id=$1 [L,QSA] RewriteRule ^forum/?$ / [R=302,L,QSA] RewriteRule ^topic/([^/]+)/page/([0-9]+)/?$
@@ -127,6 +128,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

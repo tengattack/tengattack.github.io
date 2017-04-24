@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2013/04/25/compile-nodejs-on-freebsd-9/">
-                  <h2 class="entry-title">FreeBSD 9.0 编译安装nodejs</h2>
+                <a class="entry-title" href="/2013/04/25/compile-nodejs-on-freebsd-9/">
+                  <h2>FreeBSD 9.0 编译安装nodejs</h2>
                 </a><span class="posted-on"><time datetime="2013-04-24T18:29:11.000Z">Thursday, April 25, 2013 2:29 AM</time></span></header>
               <div class="entry-content">下载配置啥的就不说了，我们在gmake中发现了如下错误: [code] ../deps/v8/src/platform-freebsd.cc:46:56: warning: execinfo.h: No such file or directory ../deps/v8/src/platform-freebsd.cc: In static member function 'static void v8::internal::OS::DumpBacktrace()': ../deps/v8/src/platform-freebsd.cc:208:
                 error: 'backtrace' was not declared in this scope ../deps/v8/src/platform-freebsd.cc:209: error: 'backtrace_symbols' was not declared in this scope [/code] 网上一搜发现有人已经找到了解决办法，可以通过修改部分源码实现: (在这个页面总搜索execinfo.h) <a href="http://blog.tmtr.jp/2013/04/nodejs.html"
@@ -114,6 +115,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2012/10/26/a-bug-in-sdl_ttf-2-0-11/">
-                  <h2 class="entry-title">SDL_ttf-2.0.11 一处bug(?)</h2>
+                <a class="entry-title" href="/2012/10/26/a-bug-in-sdl_ttf-2-0-11/">
+                  <h2>SDL_ttf-2.0.11 一处bug(?)</h2>
                 </a><span class="posted-on"><time datetime="2012-10-26T15:39:29.000Z">Friday, October 26, 2012 11:39 PM</time></span></header>
               <div class="entry-content">最近在研究ONScripter，自然是下载下源代码来研究。 由于ONS依赖SDL的库，包括SDL、SDL_image、SDL_ttf等许多开源库，我自然是全部下载下来研究了。 全部编译好link之后发现程序可以ONS执行但是却显示不了对话的文本， 调试了一早上和中午发现，显示不了文本的问题不是出现在ONS的代码里，而是在SDL_ttf库里。 在SDL_ttf.c的TTF_RenderGlyph_Shaded函数中，有一段这样的代码: [code lang=&quot;cpp&quot;]
                 /* Copy the character from the pixmap */ src = glyph-&gt;pixmap.buffer; dst = (Uint8*) textbuf-&gt;pixels; for ( row = 0; row &lt; glyph-&gt;bitmap.rows; ++row ) { memcpy( dst, src, glyph-&gt;pixmap.width ); src += glyph-&gt;pixmap.pitch;
@@ -118,6 +119,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

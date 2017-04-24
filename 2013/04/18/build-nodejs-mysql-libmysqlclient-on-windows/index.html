@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2013/04/18/build-nodejs-mysql-libmysqlclient-on-windows/">
-                  <h2 class="entry-title">nodejs mysql-libmysqlclient on windows</h2>
+                <a class="entry-title" href="/2013/04/18/build-nodejs-mysql-libmysqlclient-on-windows/">
+                  <h2>nodejs mysql-libmysqlclient on windows</h2>
                 </a><span class="posted-on"><time datetime="2013-04-18T10:45:26.000Z">Thursday, April 18, 2013 6:45 PM</time></span></header>
               <div class="entry-content">当前使用node-mysql-libmysqlclient的版本为1.5.2 虽然作者曾表示要支持Windows，但是已经很久没有动静了…… 由于笔者在Windows、Linux、MacOSX上都有开发环境，所以不得不让他们都支持…… 废话不多说，开始动手。 由于这个node-mysql-libmysqlclient编译的有个依赖库，我们先安装一下node-gyp [code]npm install node-gyp -gd[/code] 之后装mysql-libmysqlclient，我们不直接用npm，我们找到node_modules目录，git
                 clone一下 [code]git clone git://github.com/Sannis/node-mysql-libmysqlclient.git[/code] 然后把 node-mysql-libmysqlclient 目录的名字改成 mysql-libmysqlclient [code] cd mysql-libmysqlclient node-gyp rebuild [/code] 然后我们大概能看到如下的错误消息 [code] gyp info it
@@ -141,6 +142,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>

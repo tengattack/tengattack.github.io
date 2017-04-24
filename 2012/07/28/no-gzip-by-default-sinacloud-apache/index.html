@@ -14,12 +14,13 @@
 </head>
 <body>
   <div class="site">
+    <div id="top"></div>
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
           <div class="site-branding">
-            <a href="/" title="tengattack">
-              <h1 class="site-title">tengattack</h1>
+            <a class="site-title" href="/" title="tengattack">
+              <h1>tengattack</h1>
             </a>
           </div>
           <div class="site-tabs">
@@ -36,8 +37,8 @@
           <main class="site-main">
             <article>
               <header class="entry-header">
-                <a href="/2012/07/28/no-gzip-by-default-sinacloud-apache/">
-                  <h2 class="entry-title">新浪云商店的Apache居然没有默认开启gzip</h2>
+                <a class="entry-title" href="/2012/07/28/no-gzip-by-default-sinacloud-apache/">
+                  <h2>新浪云商店的Apache居然没有默认开启gzip</h2>
                 </a><span class="posted-on"><time datetime="2012-07-28T14:52:10.000Z">Saturday, July 28, 2012 10:52 PM</time></span></header>
               <div class="entry-content">坑爹，今天去商店的管理中心看了看，只用了55小时居然烧了18%的流量，我擦，这是什么概念。 加上页面打开速度有点慢，我突然就想到是不是没开gzip <span style="color: #ffff00;"><strong>右键审查元素，我擦，吓傻了，翻来覆去找不到Content-Encoding，这坑爹的！</strong></span> 没办法，只能自己建个.htaccess来解决了，云商店的wp的文件管理还得自己传插件上来弄，唉，真坑爹。</div>
             </article>
@@ -112,6 +113,7 @@
           </section>
         </aside>
       </div>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
     </div>
   </div>
 </body>
