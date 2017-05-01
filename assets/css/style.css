@@ -265,6 +265,7 @@ body > .site .site-inner {
 
 .site-article-list > .pagination {
   margin: 4.8em 0;
+  height: 3.2em;
   line-height: 3.2em;
   text-align: center;
 }
@@ -272,6 +273,14 @@ body > .site .site-inner {
 .site-article-list > .pagination li {
   display: inline-block;
   font-size: 1.6em;
+}
+
+.site-article-list > .pagination .prev {
+  float: left;
+}
+
+.site-article-list > .pagination .next {
+  float: right;
 }
 
 #comments {
