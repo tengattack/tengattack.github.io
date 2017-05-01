@@ -2,15 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Windows上Chrome无法正常显示U+2661的爱心符号♡的解决 - tengattack</title>
+  <title>Windows上Chrome无法正常显示U+2661的爱心符号♡的解决 - 腾袭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="generator" content="hanejs" />
+  <meta name="keywords" content="腾袭,tengattack,blog,博客" />
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="tengattack ATOM Feed" />
-  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="tengattack" />
-  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="腾袭 ATOM Feed" />
+  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="腾袭" />
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
 </head>
 <body>
   <div class="site">
@@ -18,11 +19,7 @@
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
-          <div class="site-branding">
-            <a class="site-title" href="/" title="tengattack">
-              <h1>tengattack</h1>
-            </a>
-          </div>
+          <div class="site-branding"><a class="site-title" href="/" title="腾袭"><i></i><h1>腾袭</h1></a></div>
           <div class="site-tabs">
             <ul class="site-tab-nav">
               <li class="active"><a href="/" title="Blog">Blog</a></li>
@@ -35,7 +32,7 @@
       <div class="site-content">
         <div class="content-area">
           <main class="site-main">
-            <article>
+            <article class="article">
               <header class="entry-header">
                 <a class="entry-title" href="/2013/07/10/fix-windows-chrome-heart-symbol-u2661/">
                   <h2>Windows上Chrome无法正常显示U+2661的爱心符号♡的解决</h2>
@@ -46,6 +43,13 @@
                 Gothic字体中单独提取了这个爱心符号作出了一个字体，转成data base64在CSS中使用: [code lang=&quot;css&quot;] @font-face { font-family: arial; unicode-range: U+2661; src: url(data:font/ttf;base64,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);
                 font-weight: normal; font-style: normal; } [/code] 这里值得注意的是我们需要根据我们自己的需要修改其中的font-family来指定一个页面中用的字体，要不然也显示不了。这里为了方便就直接用arial字体了。 使用Stylish修改之后，Windows上的Chrome有这样的效果:
                 <a href="/uploads/2013/07/5b-6f-windows-fix.png"><img src="/uploads/2013/07/5b-6f-windows-fix.png" alt="5b-6f-windows-fix" width="93" height="508" class="alignnone size-full wp-image-633" /></a> ps. 值得一提的是，听G+上一位朋友的说法，日文字体中一般都是有这个符号的，如果大家想自己换个适合的符号的话，可以去找些日文字体来提取w </div>
+              <div class="entry-footer">
+                <h5 class="entry-tags-title">Tags:</h5>
+                <ul class="entry-tags">
+                  <li><a target="_blank" href="/tags/web/" title="web">web</a></li>
+                  <li><a target="_blank" href="/tags/windows/" title="Windows">Windows</a></li>
+                </ul>
+              </div>
             </article>
           </main>
           <div id="comments">
@@ -118,7 +122,7 @@
           </section>
         </aside>
       </div>
-      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a>, designed by <a target="_blank" href="http://weibo.com/u/2184354983">tutu</a></footer>
     </div>
   </div>
 </body>

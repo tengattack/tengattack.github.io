@@ -2,15 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>nodejs mysql-libmysqlclient on windows - tengattack</title>
+  <title>nodejs mysql-libmysqlclient on windows - 腾袭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="generator" content="hanejs" />
+  <meta name="keywords" content="腾袭,tengattack,blog,博客" />
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="tengattack ATOM Feed" />
-  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="tengattack" />
-  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="腾袭 ATOM Feed" />
+  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="腾袭" />
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
 </head>
 <body>
   <div class="site">
@@ -18,11 +19,7 @@
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
-          <div class="site-branding">
-            <a class="site-title" href="/" title="tengattack">
-              <h1>tengattack</h1>
-            </a>
-          </div>
+          <div class="site-branding"><a class="site-title" href="/" title="腾袭"><i></i><h1>腾袭</h1></a></div>
           <div class="site-tabs">
             <ul class="site-tab-nav">
               <li class="active"><a href="/" title="Blog">Blog</a></li>
@@ -35,7 +32,7 @@
       <div class="site-content">
         <div class="content-area">
           <main class="site-main">
-            <article>
+            <article class="article">
               <header class="entry-header">
                 <a class="entry-title" href="/2013/04/18/build-nodejs-mysql-libmysqlclient-on-windows/">
                   <h2>nodejs mysql-libmysqlclient on windows</h2>
@@ -70,6 +67,13 @@
                 _FREE_ALLOC(); [/code] 注意还有个地方可能需要改的就是在 mysql 的 include 的一个文件 mysql_com.h，他可能会报错，关于my_socket类型的一个问题，我们在 [code lang=&quot;cpp&quot;] #ifndef _mysql_com_h #define _mysql_com_h [/code] 之后加上如下代码即可: [code lang=&quot;cpp&quot;] #ifdef WIN32
                 #undef my_socket #define my_socket int #endif [/code] 然后就是编译，编译完成后 Release 目录下就会有个 mysql_bindings.node 文件(DLL)，这时我们还需要把链接的 libmysql.lib 对应的 libmysql.dll 文件也放到这个目录下就可以了。 如果是在一个其他的工作目录中也需要用到 mysql-libmysqlclient ，我们只需要先在 node_modules 目录下
                 git 之后，改目录名，去掉前面的 <strong>node-</strong> ，然后把现在的 build 目录下的 Release 目录拷到那个工作目录下 node_modules/mysql-libmysql/build 目录下就可以了。 Windows下使用也一样很棒！ 这里有编译好的程序(VS2012) <a href="http://tengattack.com/wp-content/uploads/2013/04/mysql_bindings.node-win.7z">mysql_bindings.node-win</a>                （等有空再详细整理一下 </div>
+              <div class="entry-footer">
+                <h5 class="entry-tags-title">Tags:</h5>
+                <ul class="entry-tags">
+                  <li><a target="_blank" href="/tags/nodejs/" title="nodejs">nodejs</a></li>
+                  <li><a target="_blank" href="/tags/windows/" title="Windows">Windows</a></li>
+                </ul>
+              </div>
             </article>
           </main>
           <div id="comments">
@@ -142,7 +146,7 @@
           </section>
         </aside>
       </div>
-      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a>, designed by <a target="_blank" href="http://weibo.com/u/2184354983">tutu</a></footer>
     </div>
   </div>
 </body>

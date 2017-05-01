@@ -2,15 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>修改Windows下dnsapi.dll强制使用TCP进行DNS查询 - tengattack</title>
+  <title>修改Windows下dnsapi.dll强制使用TCP进行DNS查询 - 腾袭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="generator" content="hanejs" />
+  <meta name="keywords" content="腾袭,tengattack,blog,博客" />
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="tengattack ATOM Feed" />
-  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="tengattack" />
-  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="腾袭 ATOM Feed" />
+  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="腾袭" />
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
 </head>
 <body>
   <div class="site">
@@ -18,11 +19,7 @@
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
-          <div class="site-branding">
-            <a class="site-title" href="/" title="tengattack">
-              <h1>tengattack</h1>
-            </a>
-          </div>
+          <div class="site-branding"><a class="site-title" href="/" title="腾袭"><i></i><h1>腾袭</h1></a></div>
           <div class="site-tabs">
             <ul class="site-tab-nav">
               <li class="active"><a href="/" title="Blog">Blog</a></li>
@@ -35,7 +32,7 @@
       <div class="site-content">
         <div class="content-area">
           <main class="site-main">
-            <article>
+            <article class="article">
               <header class="entry-header">
                 <a class="entry-title" href="/2014/09/03/modify-dnsapi.dll-to-enforce-tcp-dns/">
                   <h2>修改Windows下dnsapi.dll强制使用TCP进行DNS查询</h2>
@@ -113,6 +110,13 @@ __asm {
                 <p>最后附上我修改好32位和64位的 dnsapi.dll (6.3.9600.17039) 文件：<br /> <a href="https://bless.moe/io/win/mod/dnsapi/" target="_blank">https://bless.moe/io/win/mod/dnsapi/</a></p>
                 <p>另外，我们需要注意一点，像<strong>在 chrome://flags/ 开启了实验性异步 DNS 客户端的 Chrome</strong> 等软件会使用自带的DNS客户端，不走系统的DNS解析，所以可能还是UDP方式查询DNS。<br /> -<del datetime="2014-09-03T19:33:24+00:00">我费了这么大力气，就为了写篇文章都不行嘛，其实我觉得拿这玩意去投稿的话也能赚点稿费就是了</del>-</p>
               </div>
+              <div class="entry-footer">
+                <h5 class="entry-tags-title">Tags:</h5>
+                <ul class="entry-tags">
+                  <li><a target="_blank" href="/tags/c/" title="c++">c++</a></li>
+                  <li><a target="_blank" href="/tags/develop/" title="develop">develop</a></li>
+                </ul>
+              </div>
             </article>
           </main>
           <div id="comments">
@@ -185,7 +189,7 @@ __asm {
           </section>
         </aside>
       </div>
-      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a>, designed by <a target="_blank" href="http://weibo.com/u/2184354983">tutu</a></footer>
     </div>
   </div>
 </body>

@@ -2,15 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>eAccelerator在Windows上编译有感 - tengattack</title>
+  <title>eAccelerator在Windows上编译有感 - 腾袭</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="generator" content="hanejs" />
+  <meta name="keywords" content="腾袭,tengattack,blog,博客" />
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="tengattack ATOM Feed" />
-  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="tengattack" />
-  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="腾袭 ATOM Feed" />
+  <link rel="search" href="http://blog.tengattack.com/atom.xml" type="application/opensearchdescription+xml" title="腾袭" />
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
 </head>
 <body>
   <div class="site">
@@ -18,11 +19,7 @@
     <div class="site-inner">
       <header class="site-header">
         <div class="site-header-main">
-          <div class="site-branding">
-            <a class="site-title" href="/" title="tengattack">
-              <h1>tengattack</h1>
-            </a>
-          </div>
+          <div class="site-branding"><a class="site-title" href="/" title="腾袭"><i></i><h1>腾袭</h1></a></div>
           <div class="site-tabs">
             <ul class="site-tab-nav">
               <li class="active"><a href="/" title="Blog">Blog</a></li>
@@ -35,7 +32,7 @@
       <div class="site-content">
         <div class="content-area">
           <main class="site-main">
-            <article>
+            <article class="article">
               <header class="entry-header">
                 <a class="entry-title" href="/2012/07/29/compile-eaccelerator-on-windows/">
                   <h2>eAccelerator在Windows上编译有感</h2>
@@ -48,6 +45,13 @@
                 TSRMLS_CC); } } } if (from-&gt;default_static_members_count) { int i = 0; ADDSIZE(size, sizeof(zval *) * from-&gt;default_static_members_count); for (i = 0; i &lt; from-&gt;default_static_members_count; i++) { if (from-&gt;default_static_members_table[i])
                 { size += calc_zval_ptr(&amp;from-&gt;default_static_members_table[i] TSRMLS_CC); } } } [/code] 这下好了，果断通过了编译，运行了起来。 不过可惜，运行一些大型php程序总有点问题，像discuz X2.5出现找不到C的父类core的问题，这样根本运行不了discuz，虽然dz也很坑 然后试了试phpMyAdmin，好吧，能运行，但是还是有点错误，至少能在网页里开着来玩了；
                 最后我试了试wordpress，好家伙，php的驻守进程崩溃了，还跳出个Windows程序意外结束的消息…… 果断，放弃之。 </div>
+              <div class="entry-footer">
+                <h5 class="entry-tags-title">Tags:</h5>
+                <ul class="entry-tags">
+                  <li><a target="_blank" href="/tags/php/" title="php">php</a></li>
+                  <li><a target="_blank" href="/tags/c/" title="c++">c++</a></li>
+                </ul>
+              </div>
             </article>
           </main>
           <div id="comments">
@@ -120,7 +124,7 @@
           </section>
         </aside>
       </div>
-      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a></footer>
+      <footer>© 2017 tengattack, powered by <a target="_blank" href="https://github.com/hanejs">hanejs</a>, designed by <a target="_blank" href="http://weibo.com/u/2184354983">tutu</a></footer>
     </div>
   </div>
 </body>
