@@ -113,7 +113,8 @@ body > .site .site-inner {
   color: #85708d;
 }
 
-.site-header .site-tabs > ul li a:hover {
+.site-header .site-tabs > ul li a:hover,
+.site-header .site-tabs > ul li.active a {
   color: #9d8aa5;
 }
 
